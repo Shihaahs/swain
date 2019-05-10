@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swain.core.dal.dao.ProductDao">
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.swain.core.dal.domain.Product">
+                    <id column="product_id" property="productId"/>
+                    <result column="product_user_id" property="productUserId"/>
+                    <result column="product_machine_id" property="productMachineId"/>
+                    <result column="product_material_id" property="productMaterialId"/>
+                    <result column="product_material_weight" property="productMaterialWeight"/>
+                    <result column="product_out_name" property="productOutName"/>
+                    <result column="product_out_weight" property="productOutWeight"/>
+                    <result column="is_delete" property="isDelete"/>
+                    <result column="gmt_create" property="gmtCreate"/>
+                    <result column="gmt_modified" property="gmtModified"/>
+        </resultMap>
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+       product_id,product_user_id,product_machine_id,product_material_id,product_material_weight,product_out_name,product_out_weight,is_delete,gmt_create,gmt_modified
+        </sql>
+</mapper>

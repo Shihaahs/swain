@@ -1,0 +1,9 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import com.swain.core.common.base.BaseManager;
+
+
+public interface ${entity}Manager extends BaseManager<${entity}> {
+
+}

@@ -1,0 +1,12 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import com.swain.core.common.base.BaseManagerImpl;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ${table.serviceImplName} extends BaseManagerImpl<${table.mapperName}, ${entity}> implements ${entity}Manager{
+
+}

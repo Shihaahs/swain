@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swain.core.dal.dao.MachineDao">
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.swain.core.dal.domain.Machine">
+                    <id column="machine_id" property="machineId"/>
+                    <result column="machine_name" property="machineName"/>
+                    <result column="machine_type" property="machineType"/>
+                    <result column="machine_user_id" property="machineUserId"/>
+                    <result column="is_delete" property="isDelete"/>
+                    <result column="gmt_create" property="gmtCreate"/>
+                    <result column="gmt_modified" property="gmtModified"/>
+        </resultMap>
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+       machine_id,machine_name,machine_type,machine_user_id,is_delete,gmt_create,gmt_modified
+        </sql>
+</mapper>
