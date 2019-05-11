@@ -101,22 +101,31 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Machine getMachineById(Long id) {
-        return null;
+    public MachineVO getMachineById(Long id) {
+        Machine machine = machineManager.selectById(id);
+        User user = userManager.selectById(machine.getMachineUserId());
+        MachineVO machineVO = new MachineVO();
+        machineVO.setMachineId(machine.getMachineId());
+        machineVO.setMachineName(machine.getMachineName());
+        machineVO.setMachineType(machine.getMachineType());
+        machineVO.setMachineUserName(user.getUsername());
+        machineVO.setGmtCreate(machine.getGmtCreate());
+        machineVO.setGmtModified(machine.getGmtModified());
+        return machineVO;
     }
 
     @Override
     public Integer addMachine(Machine machine) {
-        return null;
+        return machineManager.insert(machine);
     }
 
     @Override
     public Integer deleteMachineById(Long id) {
-        return null;
+        return machineManager.deleteById(id);
     }
 
     @Override
     public Integer updateMachine(Machine machine) {
-        return null;
+        return machineManager.updateById(machine);
     }
 }

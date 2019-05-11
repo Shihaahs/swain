@@ -113,7 +113,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/getMachineById.json", method = RequestMethod.POST)
-    public Machine getMachineById(@RequestBody Machine machine) {
+    public MachineVO getMachineById(@RequestBody Machine machine) {
         if (Objects.isNull(machine.getMachineId())) {
             log.error("管理员根据id获取用户异常 -> id为空");
             return null;

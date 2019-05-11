@@ -85,7 +85,7 @@ public class ToController {
     public String toAdminMachine() {
         return "admin-machine";
     }
-    @RequestMapping("/to/admin-user-add")
+    @RequestMapping("/to/admin-machine-add")
     public String toAdminAddMachine() {
         return "admin-machine-add";
     }

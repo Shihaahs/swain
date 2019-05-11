@@ -60,7 +60,7 @@ public interface AdminService {
      * @param id
      * @return
      */
-    Machine getMachineById(Long id);
+    MachineVO getMachineById(Long id);
 
     /**
      * 新增员工信息
