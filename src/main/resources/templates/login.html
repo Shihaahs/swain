@@ -1,0 +1,267 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link href="/static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>物流管理系统 - Sivir</title>
+</head>
+<body>
+<div class="header"></div>
+<div class="loginWraper">
+    <div id="loginForm" class="loginBox">
+        <form class="form form-horizontal" id="form-login">
+            <div class="row cl">
+                <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+                <div class="formControls col-xs-8">
+                    <input id="username" name="" type="text" placeholder="账号" class="input-text size-L"
+                    />
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+                <div class="formControls col-xs-8">
+                    <input id="password" name="" type="password" placeholder="密码" class="input-text size-L"/>
+                </div>
+            </div>
+            <!--<div class="row cl">
+              <div class="formControls col-xs-8 col-xs-offset-3">
+                <input class="input-text size-L" type="text" placeholder="验证码" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;" />
+                <img src=""> <a id="kanbuq" href="javascript:;">看不清，换一张</a> </div>
+            </div>-->
+            <!--<div class="row cl">
+              <div class="formControls col-xs-8 col-xs-offset-3">
+                <label for="online">
+                  <input type="checkbox" name="online" id="online" value="">
+                  使我保持登录状态</label>
+              </div>
+            </div>-->
+            <div class="row cl">
+                <div class="formControls col-xs-8 col-xs-offset-3">
+                    <input name="" type="submit" class="btn btn-success radius size-L"
+                           value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
+                    <input name="" type="reset" class="btn btn-default radius size-L"
+                           value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
+                </div>
+            </div>
+            <a onclick="changeModule()" class="r" style="margin-right: 30px">没有账号，注册一个</a>
+        </form>
+    </div>
+    <div id="registerForm" class="registerBox" style="display: none">
+        <form class="form form-horizontal" id="form-register">
+            <div class="row cl">
+                <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+                <div class="formControls col-xs-8">
+                    <input id="userNameRegister" name="" type="text" placeholder="请输入用户名" class="input-text size-L" />
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+                <div class="formControls col-xs-8">
+                    <input id="passwordRegister" name="" type="password" placeholder="请输入密码" class="input-text size-L"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+                <div class="formControls col-xs-8">
+                    <input id="passwordRegisterConfirm" name="" type="password" placeholder="请再次输入密码" class="input-text size-L"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <select id="permission" class="select" style="width: 17%;height:32px ;display: inline-block">
+                        <option disabled selected hidden>请选择角色</option>
+                        <option value="0">管理员</option>
+                        <option value="1">员工</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row cl">
+                <div class="formControls col-xs-8 col-xs-offset-3">
+                    <input name="" type="submit" class="btn btn-success radius size-L" id="submit"
+                           value="&nbsp;注&nbsp;&nbsp;&nbsp;&nbsp;册&nbsp;">
+                    <input name="" type="reset" class="btn btn-default radius size-L"
+                           value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;" id="toLoginForm">
+                </div>
+            </div>
+        </form>
+        <a onclick="changeModule()" class="r" style="margin-right: 30px">返回登录</a>
+    </div>
+</div>
+<div class="footer">Copyright Sivir by SXX v1.0</div>
+<script type="text/javascript" src="/static/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="/static/fillFrom.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+
+
+        $("#form-login").validate({
+            rules: {
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+            },
+            onkeyup: false,
+            focusCleanup: true,
+            success: "valid",
+            submitHandler: function (form) {
+                var user = {
+                    username : $("#username").val(),
+                    password : $("#password").val()
+                };
+
+                console.log(user);
+                $.ajax({
+                    type: 'POST',
+                    url: "../login.json",
+                    data: JSON.stringify(user),
+                    cache: false,
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        console.log(data);
+                        if (data !== null) {
+                            localStorage.setItem("user", JSON.stringify(data.data));
+                            window.location.href = "../to/index";
+                        }
+                        if (data === 2) {
+                            alert("账号! 请重新输入!");
+                            $("#phone").val("");
+                            $("#password").val("");
+                        }
+
+                    },
+                    error: function (errorThrown) {
+                        layer.msg('error!', {icon: 1, time: 1000});
+                    }
+                });
+
+            }
+        });
+
+        $("#form-register").validate({
+            rules: {
+                userNameRegister: {
+                    required: true,
+                },
+                passwordRegister: {
+                    required: true,
+                    minlength: 6
+                },
+                passwordRegisterConfirm: {
+                    required: true,
+                    minlength: 6
+                },
+                phoneRegister: {
+                    required: true,
+                    minlength: 11,
+                    maxlength: 11,
+                    isPhone: true
+                }
+            },
+            onkeyup: false,
+            focusCleanup: true,
+            success: "valid",
+            submitHandler: function (form) {
+                var phone = $("#phoneRegister").val();
+                var pwd = $("#passwordRegister").val();
+                var cpwd = $("#passwordRegisterConfirm").val();
+
+                if (pwd !== cpwd) {
+                    alert("两次密码不一致");
+                    $("#passwordRegister").val("");
+                    $("#passwordRegisterConfirm").val("");
+                    return;
+                }
+                var user = {
+                    userName: $("#userNameRegister").val(),
+                    phone : phone,
+                    password : pwd,
+                    permission : $("#permission").val(),
+                };
+
+                console.log(user);
+                $.ajax({
+                    type: 'POST',
+                    url: "../register.json",
+                    data: JSON.stringify(user),
+                    cache: false,
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+
+                        if (data.code === "200") {
+                            alert('注册成功!');
+                            window.location.href = "../to/login";
+                        }
+                        if (data.code === "1003") {
+                            alert('手机号已存在!');
+                            $("#phoneRegister").val("");
+                            $("#userNameRegister").val("");
+                            $("#passwordRegister").val("");
+                            $("#passwordRegisterConfirm").val("");
+                            $("#permission").val("");
+                        }
+
+                    },
+                    error: function (errorThrown) {
+                        layer.msg('error!', {icon: 1, time: 1000});
+                    }
+                });
+
+            }
+        });
+    });
+
+
+    function changeModule() {
+        if ($("#registerForm").css("display") === "none") {
+            console.log("registerForm");
+            $("#registerForm").show();
+            $("#loginForm").css("display", "none");
+            //清除原文本
+            $("#userNameRegister").val("");
+            $("#permission").val("");
+            $("#phoneRegister").val("");
+            $("#passwordRegisterConfirm").val("");
+            $("#passwordRegister").val("");
+        } else {
+            console.log("loginForm");
+            $("#loginForm").show();
+            $("#registerForm").css("display", "none");
+        }
+
+    }
+
+</script>
+</body>
+</html>

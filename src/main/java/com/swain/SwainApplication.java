@@ -21,7 +21,7 @@ public class SwainApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SwainApplication.class, args);
-        logger.info("--- Swain started ---> http://localhost:8079/");
+        logger.info("--- Swain started ---> http://localhost:8079/to/login");
     }
 
 }
