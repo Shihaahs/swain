@@ -1,5 +1,6 @@
 package com.swain.core.service;
 
+import com.swain.core.dal.domain.Machine;
 import com.swain.core.dal.domain.User;
 
 import java.util.List;
@@ -41,38 +42,38 @@ public interface AdminService {
     Integer updateUser(User user);
 
     /**
-     * 获得全部用户注释
+     * 获得全部机器注释
      * @return
      */
-    List<User> getAllUsers();
+    List<Machine> getAllMachines();
 
     /**
-     * 依据id获取用户信息
+     * 依据id获取机器信息
      * @param id
      * @return
      */
-    User getUserById(Long id);
+    Machine getMachineById(Long id);
 
     /**
-     * 新增员工信息
-     * @param user
+     * 新增机器信息
+     * @param machine
      * @return
      */
-    Integer insertUser(User user);
+    Integer insertMachine(Machine machine);
 
     /**
-     * 依据id删除员工信息
+     * 依据id删除机器信息
      * @param id
      * @return
      */
-    Integer deleteUserById(Long id);
+    Integer deleteMachineById(Long id);
 
     /**
-     * 修改员工信息
-     * @param user
+     * 修改机器信息
+     * @param machine
      * @return
      */
-    Integer updateUser(User user);
+    Integer updateMachine(Machine machine);
 
 
 
