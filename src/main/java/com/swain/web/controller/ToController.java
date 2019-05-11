@@ -79,17 +79,21 @@ public class ToController {
 
 
     /**
-     *     管理员 - 订单管理
+     *     管理员 - 机器管理
      */
-    @RequestMapping("/to/admin-sorder")
-    public String toAdminSorder() {
-        return "admin-sorder";
+    @RequestMapping("/to/admin-machine")
+    public String toAdminMachine() {
+        return "admin-machine";
     }
-    @RequestMapping("/to/admin-sorder-update")
-    public ModelAndView toAdminUpdateSorder(@RequestParam Long orderId) {
+    @RequestMapping("/to/admin-user-add")
+    public String toAdminAddMachine() {
+        return "admin-machine-add";
+    }
+    @RequestMapping("/to/admin-machine-update")
+    public ModelAndView toAdminUpdateMachine(@RequestParam Long machineId) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin-sorder-update");
-        mv.addObject("orderId", orderId);
+        mv.setViewName("admin-machine-update");
+        mv.addObject("machineId", machineId);
         return mv;
     }
 

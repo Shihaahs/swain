@@ -76,11 +76,10 @@
 			<dd>
 				<ul>
 					<li><a data-href="admin-user" data-title="用户管理" href="javascript:void(0)">用户管理</a></li>
-					<li><a data-href="admin-sorder" data-title="订单管理" href="javascript:void(0)">订单管理</a></li>
-					<li><a data-href="admin-region" data-title="区域管理" href="javascript:void(0)">区域管理</a></li>
-					<li><a data-href="admin-car" data-title="存储管理" href="javascript:void(0)">存储管理</a></li>
-					<li><a data-href="admin-arrange" data-title="配送管理" href="javascript:void(0)">配送管理</a></li>
-					<li><a data-href="admin-report" data-title="报表管理" href="javascript:void(0)">报表管理</a></li>
+					<li><a data-href="admin-machine" data-title="机器管理" href="javascript:void(0)">机器管理</a></li>
+					<li><a data-href="admin-materia" data-title="物料管理" href="javascript:void(0)">物料管理</a></li>
+					<li><a data-href="admin-product" data-title="生产数据管理" href="javascript:void(0)">生产数据管理</a></li>
+					<li><a data-href="admin-repair" data-title="维护日志" href="javascript:void(0)">维护日志</a></li>
 			</ul>
 		</dd>
 	</dl>
@@ -121,31 +120,31 @@
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript" src="/static/lib/jquery.contextmenu/jquery.contextmenu.r2.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" th:inline="none">
 $(function(){
 
     var user = JSON.parse(localStorage.getItem("user"));
     console.log(user);
-    $("#loginName").text(user.userName);
+    $("#loginName").text(user.username);
 
 
-    if (user.permission === 0) {
-        $("#menu-admin").show();
-        $("#menu-customer").css("display", "none");
-        $("#menu-trans").css("display", "none");
-    } else if (user.permission === 1) {
-        $("#menu-admin").css("display", "none");
-        $("#menu-customer").css("display", "none");
-        $("#menu-trans").show();
-    } else if (user.permission === 2) {
-        $("#menu-admin").css("display", "none");
-        $("#menu-customer").show();
-        $("#menu-trans").css("display", "none");
-    } else {
-        $("#menu-admin").show();
-        $("#menu-customer").show();
-        $("#menu-trans").show();
-    }
+//    if (user.permission === 0) {
+//        $("#menu-admin").show();
+//        $("#menu-customer").css("display", "none");
+//        $("#menu-trans").css("display", "none");
+//    } else if (user.permission === 1) {
+//        $("#menu-admin").css("display", "none");
+//        $("#menu-customer").css("display", "none");
+//        $("#menu-trans").show();
+//    } else if (user.permission === 2) {
+//        $("#menu-admin").css("display", "none");
+//        $("#menu-customer").show();
+//        $("#menu-trans").css("display", "none");
+//    } else {
+//        $("#menu-admin").show();
+//        $("#menu-customer").show();
+//        $("#menu-trans").show();
+//    }
 
 	/*$("#min_title_list li").contextMenu('Huiadminmenu', {
 		bindings: {

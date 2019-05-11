@@ -18,6 +18,7 @@
     <!--[if IE 6]>
     <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>DD_belatedPNG.fix('*');</script>
+
     <![endif]-->
     <title>物流管理系统 - Sivir</title>
 </head>
@@ -112,6 +113,8 @@
 <script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
 <script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
 <script type="text/javascript" src="/static/fillFrom.js"></script>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script>
 <script type="text/javascript">
     $(function () {
         $('.skin-minimal input').iCheck({
@@ -132,6 +135,8 @@
             focusCleanup: true,
             success: "valid",
             submitHandler: function (form) {
+
+                window.location.href = "../to/index";
                 var user = {
                     username : $("#username").val(),
                     password : $("#password").val()
@@ -148,13 +153,15 @@
                     contentType: "application/json;charset=utf-8",
                     success: function (data) {
                         console.log(data);
-                        if (data !== null) {
-                            localStorage.setItem("user", JSON.stringify(data.data));
+                        if (data.userId !== null) {
+                            localStorage.setItem("user", JSON.stringify(data));
                             window.location.href = "../to/index";
                         }
-                        if (data === 2) {
-                            alert("账号! 请重新输入!");
-                            $("#phone").val("");
+
+                        if (data.userId === null) {
+                            //alert("账号或密码错误，请重新输入！");
+                            layer.msg('账号或密码错误，请重新输入！', {icon: 2, time: 1500});
+                            $("#username").val("");
                             $("#password").val("");
                         }
 
