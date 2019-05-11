@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -19,10 +20,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<User> getAllUsers() {
-
-        //userManager.deleteById(1L);
-
-        return userManager.selectList(new EntityWrapper<User>());
+        //获取全部用户信息，按照时间逆序显示
+        return userManager.selectList(new EntityWrapper<User>()
+                .orderDesc(Collections.singleton("gmt_modified")));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Integer insertUser(User user) {
+    public Integer addUser(User user) {
         return userManager.insert(user);
     }
 

@@ -14,9 +14,6 @@ import java.util.List;
 public class StaffServiceImpl implements StaffService{
 
 
-    @Autowired
-    private Material material;
-
     @Override
     public Integer insertMaterial(Material material) {
         return null;

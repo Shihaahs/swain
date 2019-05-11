@@ -20,6 +20,6 @@ public class TestController {
     @RequestMapping("/test/test1.json")
     @ResponseBody
     public List<User> testTest1() {
-        return adminService.getAllUser();
+        return adminService.getAllUsers();
     }
 }
