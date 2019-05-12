@@ -20,9 +20,9 @@ spring:
 
   # MySQL
   datasource:
-    url: jdbc:mysql://106.13.87.50:3306/db_swain?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/db_swain?useUnicode=true&characterEncoding=utf-8
     username: root
-    password: 922900
+    password: 123456
     driver-class-name: com.mysql.jdbc.Driver
     druid:
       initial-size: 5

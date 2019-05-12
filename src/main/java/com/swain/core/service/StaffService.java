@@ -17,7 +17,14 @@ public interface StaffService {
      * @param id
      * @return
      */
-    Integer deleteMaterialById(int id);
+    Integer deleteMaterialById(Long id);
+
+    /**
+     * 修改物料
+     * @param material
+     * @return
+     */
+    Integer updateMaterial(Material material);
 
     /**
      * 获取所有物料信息
@@ -25,5 +32,11 @@ public interface StaffService {
      */
     List<Material> getAllMaterials();
 
+
+    /**
+     * 依据获取物料信息
+     * @return
+     */
+    Material getMaterialById(Long id);
 
 }

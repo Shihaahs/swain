@@ -20,12 +20,22 @@ public class StaffServiceImpl implements StaffService{
     }
 
     @Override
-    public Integer deleteMaterialById(int id) {
+    public Integer deleteMaterialById(Long id) {
+        return null;
+    }
+
+    @Override
+    public Integer updateMaterial(Material material) {
         return null;
     }
 
     @Override
     public List<Material> getAllMaterials() {
+        return null;
+    }
+
+    @Override
+    public Material getMaterialById(Long id) {
         return null;
     }
 }
