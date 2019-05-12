@@ -20,41 +20,36 @@
     <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>DD_belatedPNG.fix('*');</script>
     <![endif]-->
-    <title>新增机器</title>
+    <title>新增物料</title>
 </head>
 <body>
 <article class="page-container">
-    <form class="form form-horizontal" id="form-admin-machine-add">
+    <form class="form form-horizontal" id="form-admin-material-add">
 
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器名称：</label>
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>物料名称：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="请输入机器名称" id="machineName"
-                       name="machineName">
+                <input type="text" class="input-text" value="" placeholder="请输入物料名称" id="materialName"
+                       name="materialName">
             </div>
         </div>
 
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器状态：</label>
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>物料单价：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="machineType" class="select" style="width: 22%;height:32px ;display: inline-block" >
-                    <option disabled selected hidden >请选择机器状态</option>
-                    <option value="0">损坏</option>
-                    <option value="1">正常</option>
-                </select>
+                <input type="text" class="input-text" value="" placeholder="请输入物料单价" id="materialPrice"
+                       name="materialPrice">
             </div>
         </div>
 
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器负责人：</label>
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>物料库存：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="machineUserName" class="select" style="width: 22%;height:32px ;display: inline-block" >
-                    <option disabled selected hidden >请选择负责人</option>
-                    <option value="0">损坏</option>
-                    <option value="1">正常</option>
-                </select>
+                <input type="text" class="input-text" value="" placeholder="请输入物料库存" id="materialTotal"
+                       name="materialTotal">
             </div>
         </div>
+
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
                 <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
@@ -83,13 +78,15 @@
             increaseArea: '20%'
         });
 
-        $("#form-admin-machine-add").validate({
+        $("#form-admin-material-add").validate({
             rules: {
-                machineName: {
+                materialName: {
                     required: true
                 },
-
-                machineType: {
+                materialPrice: {
+                    required: true
+                },
+                materialTotal:{
                     required: true
                 }
             },
@@ -98,14 +95,14 @@
             success: "valid",
             submitHandler: function (form) {
 
-                var formData = form2JsonObject("form-admin-machine-add");
-                formData = Object.assign(formData,{"machineType": $("#machineType").val() });
-
+                var formData = form2JsonObject("form-admin-material-add");
+                formData = Object.assign(formData);
+//
                 console.log(formData);
 
                 $.ajax({
                     type: 'POST',
-                    url: "../../admin/addMachine.json",
+                    url: "../../admin/addMaterial.json",
                     data: JSON.stringify(formData),
                     cache: false,
                     async: false,
@@ -125,11 +122,6 @@
                                 parent.layer.close(index);
                             }, 500);
                         }
-                        if (data === 2) {
-                            layer.msg('机器名称重复! 请重新输入!', {icon: 2, time: 1000});
-                            $("#machineName").val("");
-                        }
-
                     },
                     error: function (errorThrown) {
                         layer.msg('error!', {icon: 1, time: 1000});

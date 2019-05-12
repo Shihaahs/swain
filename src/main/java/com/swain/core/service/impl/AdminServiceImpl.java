@@ -3,8 +3,10 @@ package com.swain.core.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.swain.core.common.vo.MachineVO;
 import com.swain.core.dal.domain.Machine;
+import com.swain.core.dal.domain.Material;
 import com.swain.core.dal.domain.User;
 import com.swain.core.dal.manager.MachineManager;
+import com.swain.core.dal.manager.MaterialManager;
 import com.swain.core.dal.manager.UserManager;
 import com.swain.core.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
@@ -127,5 +129,42 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Integer updateMachine(Machine machine) {
         return machineManager.updateById(machine);
+    }
+
+
+    /**物料的管理
+     */
+    @Autowired
+    private MaterialManager materialManager;
+    @Override
+    public Integer addMaterial(Material material) {
+        //若物料已存在，则增加库存即可
+        Material m = materialManager.selectOne(new EntityWrapper<Material>().eq("material_name",material.getMaterialName()));
+        if(m.getMaterialName() != null){
+            m.setMaterialTotal(m.getMaterialTotal().add(material.getMaterialTotal()));
+            return materialManager.updateById(m);
+        }
+        return materialManager.insert(material);
+    }
+
+    @Override
+    public Integer deleteMaterialById(Long id) {
+        return materialManager.deleteById(id);
+    }
+
+    @Override
+    public Integer updateMaterial(Material material) {
+        return materialManager.updateById(material);
+    }
+
+    @Override
+    public List<Material> getAllMaterials() {
+        return materialManager.selectList(new EntityWrapper<Material>()
+                .orderDesc(Collections.singleton("gmt_modified")));
+    }
+
+    @Override
+    public Material getMaterialById(Long id) {
+        return materialManager.selectById(id);
     }
 }

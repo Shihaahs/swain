@@ -3,8 +3,7 @@ package com.swain.web.controller;
 
 import com.swain.core.common.enums.ConstantEnum;
 import com.swain.core.common.vo.MachineVO;
-import com.swain.core.dal.domain.Machine;
-import com.swain.core.dal.domain.User;
+import com.swain.core.dal.domain.*;
 import com.swain.core.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,5 +120,45 @@ public class AdminController {
         return adminService.getMachineById(machine.getMachineId());
     }
 
+
+    /**
+     * =======   管理员-物料管理   =======
+     */
+    @RequestMapping(value = "/admin/getAllMaterials.json", method = RequestMethod.POST)
+    public List<Material> getAllMaterials() {
+        return adminService.getAllMaterials();
+    }
+
+    @RequestMapping(value = "/admin/addMaterial.json", method = RequestMethod.POST)
+    public Integer addMaterial(@RequestBody Material material) {
+        return adminService.addMaterial(material);
+    }
+
+    @RequestMapping(value = "/admin/deleteMaterial.json", method = RequestMethod.POST)
+    public Integer deleteMaterial(@RequestBody Material material) {
+        if (Objects.isNull(material.getMaterialId())) {
+            log.error("管理员删除物料异常 -> id为空");
+            return ConstantEnum.ZONE.getCode();
+        }
+        return adminService.deleteMaterialById(material.getMaterialId());
+    }
+
+    @RequestMapping(value = "/admin/updateMaterial.json", method = RequestMethod.POST)
+    public Integer updateMaterial(@RequestBody Material material) {
+        if (Objects.isNull(material.getMaterialId())) {
+            log.error("管理员修改物料异常 -> id为空");
+            return ConstantEnum.ZONE.getCode();
+        }
+        return adminService.updateMaterial(material);
+    }
+
+    @RequestMapping(value = "/admin/getMaterialById.json", method = RequestMethod.POST)
+    public Material getMaterialById(@RequestBody Material material) {
+        if (Objects.isNull(material.getMaterialId())) {
+            log.error("管理员根据id获取物料异常 -> id为空");
+            return null;
+        }
+        return adminService.getMaterialById(material.getMaterialId());
+    }
 
 }

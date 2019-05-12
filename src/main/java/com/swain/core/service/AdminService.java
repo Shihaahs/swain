@@ -2,6 +2,7 @@ package com.swain.core.service;
 
 import com.swain.core.common.vo.MachineVO;
 import com.swain.core.dal.domain.Machine;
+import com.swain.core.dal.domain.Material;
 import com.swain.core.dal.domain.User;
 
 import java.util.List;
@@ -83,5 +84,38 @@ public interface AdminService {
      */
     Integer updateMachine(Machine machine);
 
+    /**
+     * 添加物料
+     * @param material
+     * @return
+     */
+    Integer addMaterial(Material material);
+
+    /**
+     * 删除物料
+     * @param id
+     * @return
+     */
+    Integer deleteMaterialById(Long id);
+
+    /**
+     * 修改物料
+     * @param material
+     * @return
+     */
+    Integer updateMaterial(Material material);
+
+    /**
+     * 获取所有物料信息
+     * @return
+     */
+    List<Material> getAllMaterials();
+
+
+    /**
+     * 依据获取物料信息
+     * @return
+     */
+    Material getMaterialById(Long id);
 
 }

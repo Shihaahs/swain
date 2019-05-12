@@ -28,34 +28,34 @@ public class ToController {
         return "welcome";
     }
 
-    /**
-     *     客户 - 订单管理
-     */
-
-    @RequestMapping("/to/customer-sorder")
-    public String toCustomerSorder() {
-        return "customer-sorder";
-    }
-
-    @RequestMapping("/to/customer-sorder-add")
-    public String toCustomerAddSorder() {
-        return "customer-sorder-add";
-    }
-
-    /**
-     *     快递员 - 订单管理
-     */
-
-
-    @RequestMapping("/to/trans-received")
-    public String toTransReceived() {
-        return "trans-send";
-    }
-
-    @RequestMapping("/to/trans-send")
-    public String toTransSend() {
-        return "trans-received";
-    }
+//    /**
+//     *     客户 - 订单管理
+//     */
+//
+//    @RequestMapping("/to/customer-sorder")
+//    public String toCustomerSorder() {
+//        return "customer-sorder";
+//    }
+//
+//    @RequestMapping("/to/customer-sorder-add")
+//    public String toCustomerAddSorder() {
+//        return "customer-sorder-add";
+//    }
+//
+//    /**
+//     *     快递员 - 订单管理
+//     */
+//
+//
+//    @RequestMapping("/to/trans-received")
+//    public String toTransReceived() {
+//        return "trans-send";
+//    }
+//
+//    @RequestMapping("/to/trans-send")
+//    public String toTransSend() {
+//        return "trans-received";
+//    }
 
 
     /**
@@ -98,22 +98,23 @@ public class ToController {
     }
 
     /**
-     *     管理员 - 区域存储管理
+     *  管理员 物料管理
      */
-    @RequestMapping("/to/admin-region")
-    public String toAdminRegion() {
-        return "admin-region";
+    @RequestMapping("/to/admin-material")
+    public String toAdminMaterial() {return "admin-material";}
+
+    @RequestMapping("/to/admin-material-add")
+    public String toAdminAddMaterial() {return "admin-material-add";}
+
+    @RequestMapping("/to/admin-material-update")
+    public ModelAndView toAdminUpdateMaterial(@RequestParam Long materialId) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin-material-update");
+        mv.addObject("materialId", materialId);
+        return mv;
     }
 
-    @RequestMapping("/to/admin-region-add")
-    public String toAdminAddRegion() {
-        return "admin-region-update";
-    }
 
-    @RequestMapping("/to/admin-region-update")
-    public String toAdminUpdateRegion() {
-        return "admin-region-update";
-    }
 
 
     /**

@@ -20,39 +20,35 @@
     <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>DD_belatedPNG.fix('*');</script>
     <![endif]-->
-    <title>新增机器</title>
+    <title>修改物料信息</title>
 </head>
 <body>
 <article class="page-container">
-    <form class="form form-horizontal" id="form-admin-machine-add">
-
+    <form class="form form-horizontal" id="form-admin-material-update">
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器名称：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="请输入机器名称" id="machineName"
-                       name="machineName">
+                <input type="text" class="input-text" id="materialId" style="display: none" name="materialId"/>
             </div>
         </div>
-
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器状态：</label>
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>物料名称：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="machineType" class="select" style="width: 22%;height:32px ;display: inline-block" >
-                    <option disabled selected hidden >请选择机器状态</option>
-                    <option value="0">损坏</option>
-                    <option value="1">正常</option>
-                </select>
+                <input type="text" class="input-text" value="" placeholder="请输入物料名称" id="materialName"
+                       name="materialName">
             </div>
         </div>
-
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器负责人：</label>
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>物料单价：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="machineUserName" class="select" style="width: 22%;height:32px ;display: inline-block" >
-                    <option disabled selected hidden >请选择负责人</option>
-                    <option value="0">损坏</option>
-                    <option value="1">正常</option>
-                </select>
+                <input type="text" class="input-text" value="" placeholder="请输入物料单价" id="materialPrice"
+                       name="materialPrice">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>物料库存：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="请输入物料库存" id="materialTotal"
+                       name="materialTotal">
             </div>
         </div>
         <div class="row cl">
@@ -77,19 +73,58 @@
 <script type="text/javascript" src="/static/fillFrom.js"></script>
 <script type="text/javascript">
     $(function () {
+
+        var url = location.search; //获取url中"?“符后的字串
+        //获取要修改的物料信息
+        if (url.indexOf("?") !== -1) { //判断是否有参数
+            strs = url.split("="); //用等号进行分隔 （因为知道只有一个参数 所以直接用等号进分隔 如果有多个参数 要用&号分隔 再用等号进行分隔）
+            var material = {
+                "materialId": strs[1]
+            }; //直接弹出第一个参数 （如果有多个参数 还要进行循环的）
+
+            $.ajax({
+                type: 'POST',
+                url: "../../admin/getMaterialById.json",
+                data: JSON.stringify(material),
+                cache: false,
+                async: false,
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    if (data !== null) {
+                        var material = data;
+                        $("#materialId").val(material.materialId);
+                        $("#materialName").val(material.materialName);
+                        $("#materialPrice").val(material.materialPrice);
+                        $("#materialTotal").val(material.materialTotal);
+                    } else {
+                        layer.msg('获取用户信息异常!', {icon: 2, time: 1000});
+                    }
+
+                },
+                error: function (errorThrown) {
+                    layer.msg('error!', {icon: 1, time: 1000});
+                }
+
+            })
+
+        }
+
         $('.skin-minimal input').iCheck({
             checkboxClass: 'icheckbox-blue',
             radioClass: 'iradio-blue',
             increaseArea: '20%'
         });
 
-        $("#form-admin-machine-add").validate({
+        $("#form-admin-material-update").validate({
             rules: {
-                machineName: {
+                materialName: {
                     required: true
                 },
-
-                machineType: {
+                materialPrice: {
+                    required: true
+                },
+                materialTotal: {
                     required: true
                 }
             },
@@ -98,43 +133,37 @@
             success: "valid",
             submitHandler: function (form) {
 
-                var formData = form2JsonObject("form-admin-machine-add");
-                formData = Object.assign(formData,{"machineType": $("#machineType").val() });
+                var formData = form2JsonObject("form-admin-material-update");
+                formData = Object.assign(formData);
 
                 console.log(formData);
-
                 $.ajax({
                     type: 'POST',
-                    url: "../../admin/addMachine.json",
+                    url: "../../admin/updateMaterial.json",
                     data: JSON.stringify(formData),
                     cache: false,
                     async: false,
                     dataType: "json",
                     contentType: "application/json;charset=utf-8",
                     success: function (data) {
-
-                        if (data === 0) {
-                            layer.msg('添加失败，系统错误', {icon: 2, time: 1000});
-                        }
                         if (data === 1) {
-                            layer.msg('添加成功!', {icon: 1, time: 1000});
+                            layer.msg('修改成功!', {icon: 1, time: 1000});
 
                             parent.$("#refresh i").click();
                             var index = parent.layer.getFrameIndex(window.name);
                             setTimeout(function () {
                                 parent.layer.close(index);
                             }, 500);
+                        } else {
+                            layer.msg('修改异常!', {icon: 2, time: 1000});
                         }
-                        if (data === 2) {
-                            layer.msg('机器名称重复! 请重新输入!', {icon: 2, time: 1000});
-                            $("#machineName").val("");
-                        }
-
                     },
                     error: function (errorThrown) {
                         layer.msg('error!', {icon: 1, time: 1000});
                     }
                 });
+
+
 
             }
         });
