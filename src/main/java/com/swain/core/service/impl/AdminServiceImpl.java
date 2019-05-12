@@ -159,8 +159,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Material> getAllMaterials() {
-        return materialManager.selectList(new EntityWrapper<Material>()
-                .orderDesc(Collections.singleton("gmt_modified")));
+        return materialManager.selectList(new EntityWrapper<Material>().orderDesc(Collections.singleton("gmt_modified"))
+            );
     }
 
     @Override

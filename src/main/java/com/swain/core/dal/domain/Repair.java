@@ -42,12 +42,13 @@ public class Repair extends BaseModel {
     /**
      * 逻辑删除，0-存在，1-已被删除
      */
+    @TableLogic
     @TableField("is_delete")
     private Integer isDelete;
     /**
      * 创建时间
      */
-    @TableLogic
+
     @TableField("gmt_create")
     private Date gmtCreate;
     /**

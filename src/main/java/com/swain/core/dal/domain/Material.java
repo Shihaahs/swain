@@ -42,12 +42,14 @@ public class Material extends BaseModel {
     /**
      * 逻辑删除，0-存在，1-已被删除
      */
+    @TableLogic
     @TableField("is_delete")
     private Integer isDelete;
+
     /**
      * 创建时间
      */
-    @TableLogic
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField("gmt_create")
     private Date gmtCreate;
     /**
@@ -59,7 +61,7 @@ public class Material extends BaseModel {
     /**
      * 物料库存，单位kg
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+
     @TableField("material_total")
     private BigDecimal materialTotal;
 
