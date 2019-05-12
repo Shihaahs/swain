@@ -44,6 +44,17 @@ public interface AdminService {
     Integer updateUser(User user);
 
     /**
+     * 获取所有员工信息
+     * @param
+     * @return
+     */
+    List<User> getAllStaff();
+
+
+
+
+
+    /**
      * 检查登陆
      * @param user
      * @return

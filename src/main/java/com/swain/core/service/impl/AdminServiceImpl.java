@@ -1,6 +1,7 @@
 package com.swain.core.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.swain.core.common.enums.UserPermissionEnum;
 import com.swain.core.common.vo.MachineVO;
 import com.swain.core.dal.domain.Machine;
 import com.swain.core.dal.domain.Material;
@@ -44,6 +45,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Integer updateUser(User user) {
         return userManager.updateById(user);
+    }
+
+    @Override
+    public List<User> getAllStaff() {
+        return userManager.selectList(
+                new EntityWrapper<User>()
+                        .eq("permission", UserPermissionEnum.STAFF.getCode()));
     }
 
     @Override

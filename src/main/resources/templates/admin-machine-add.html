@@ -80,6 +80,39 @@
             radioClass: 'iradio-blue',
             increaseArea: '20%'
         });
+        //下拉选择框获取所有员工
+        $.ajax({
+            type: 'POST',
+            url: "../../admin/getAllStaff.json",
+            cache: false,
+            async: false,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                var machineUser = $("#machineUser");
+
+                //防止数据重复添加
+                if (machineUser.find("option:last").index() > 1) {
+                    machineUser.empty();
+                    machineUser.append("<option disabled selected hidden >请选择负责人</option>")
+                }
+
+                //给select追加数据
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    var option = document.createElement('option');
+                    option.innerText = data[i]['username'];
+                    option.value = data[i]['userId'];
+                    machineUser.append(option);
+                }
+
+            },
+            error: function (errorThrown) {
+                layer.msg('error!', {icon: 1, time: 1000});
+            }
+        });
+
 
         $("#form-admin-machine-add").validate({
             rules: {
@@ -98,6 +131,7 @@
 
                 var formData = form2JsonObject("form-admin-machine-add");
                 formData = Object.assign(formData,{"machineType": $("#machineType").val() });
+                formData = Object.assign(formData,{"machineUserId": $("#machineUser").val() });
 
                 console.log(formData);
 

@@ -33,7 +33,6 @@ public class AdminController {
     @RequestMapping(value = "/login.json", method = RequestMethod.POST)
     public User login(@RequestBody User user) {
         //这里自己写吧，我直接返回一个值了
-
         return adminService.checkLogin(user);
     }
 
@@ -78,6 +77,12 @@ public class AdminController {
         }
         return adminService.getUserById(user.getUserId());
     }
+
+    @RequestMapping(value = "/admin/getAllStaff.json", method = RequestMethod.POST)
+    public List<User> getAllStaff() {
+        return adminService.getAllStaff();
+    }
+
 
 
     /**
