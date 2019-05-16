@@ -35,19 +35,28 @@ public class Repair extends BaseModel {
     @TableField("repair_machine_id")
     private Long repairMachineId;
     /**
+     * 维修机器状况
+     */
+
+    @TableField("repair_machine_type")
+    private Integer repairMachineType;
+
+    /**
      * 维修价格
      */
+
     @TableField("repair_price")
     private BigDecimal repairPrice;
     /**
      * 逻辑删除，0-存在，1-已被删除
      */
+    @TableLogic
     @TableField("is_delete")
     private Integer isDelete;
     /**
      * 创建时间
      */
-    @TableLogic
+
     @TableField("gmt_create")
     private Date gmtCreate;
     /**

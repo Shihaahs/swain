@@ -1,8 +1,9 @@
 package com.swain.core.service;
 
 import com.swain.core.common.vo.MachineVO;
-import com.swain.core.dal.domain.Machine;
-import com.swain.core.dal.domain.User;
+import com.swain.core.common.vo.ProductVO;
+import com.swain.core.common.vo.RepairVO;
+import com.swain.core.dal.domain.*;
 
 import java.util.List;
 
@@ -94,5 +95,60 @@ public interface AdminService {
      */
     Integer updateMachine(Machine machine);
 
+    /**
+     * 添加物料
+     * @param material
+     * @return
+     */
+    Integer addMaterial(Material material);
 
+    /**
+     * 删除物料
+     * @param id
+     * @return
+     */
+    Integer deleteMaterialById(Long id);
+
+    /**
+     * 修改物料
+     * @param material
+     * @return
+     */
+    Integer updateMaterial(Material material);
+
+    /**
+     * 获取所有物料信息
+     * @return
+     */
+    List<Material> getAllMaterials();
+
+
+    /**
+     * 依据获取物料信息
+     * @return
+     */
+    Material getMaterialById(Long id);
+
+    /**
+     * 产品相关操作
+     * @return
+     */
+    List<ProductVO> getAllProducts();
+
+    ProductVO getProductById(Long id);
+
+    Integer updateProduct(Product product);
+
+    Integer deleteProductById(Long id);
+
+    /**
+     * 维修相关操作
+     */
+    List<RepairVO> getAllRepairs();
+
+    RepairVO getRepairById(Long id);
+
+    Integer updateRepair(Repair repair);
+
+    Integer deleteRepairById(Long id);
 }
