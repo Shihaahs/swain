@@ -22,7 +22,6 @@ public class MachineVO implements Serializable{
     /**
      * 机器员工姓名
      */
-
     private String machineUserName;
     /**
      * 逻辑删除，0-存在，1-已被删除
