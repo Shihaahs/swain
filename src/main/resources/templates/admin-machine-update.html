@@ -47,7 +47,14 @@
                 </select>
             </div>
         </div>
-
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器负责人：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select id="machineUser" class="select" style="width: 22%;height:32px ;display: inline-block" >
+                    <option disabled selected hidden >请选择负责人</option>
+                </select>
+            </div>
+        </div>
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
                 <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
@@ -71,11 +78,44 @@
 <script type="text/javascript">
     $(function () {
 
+        //下拉选择框获取所有员工
+        $.ajax({
+            type: 'POST',
+            url: "../../admin/getAllStaff.json",
+            cache: false,
+            async: false,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                var machineUser = $("#machineUser");
+
+                //防止数据重复添加
+                if (machineUser.find("option:last").index() > 1) {
+                    machineUser.empty();
+                    machineUser.append("<option disabled selected hidden >请选择负责人</option>")
+                }
+
+                //给select追加数据
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    var option = document.createElement('option');
+                    option.innerText = data[i]['username'];
+                    option.value = data[i]['userId'];
+                    machineUser.append(option);
+                }
+
+            },
+            error: function (errorThrown) {
+                layer.msg('error!', {icon: 1, time: 1000});
+            }
+        });
+
         var url = location.search; //获取url中"?“符后的字串
         //获取要修改的用户信息
         if (url.indexOf("?") !== -1) { //判断是否有参数
             strs = url.split("="); //用等号进行分隔 （因为知道只有一个参数 所以直接用等号进分隔 如果有多个参数 要用&号分隔 再用等号进行分隔）
-            var machine = {
+            const machine = {
                 "machineId": strs[1]
             }; //直接弹出第一个参数 （如果有多个参数 还要进行循环的）
 
@@ -89,13 +129,13 @@
                 contentType: "application/json;charset=utf-8",
                 success: function (data) {
                     if (data !== null) {
-                        var machine = data;
+                        const machine = data;
                         $("#machineId").val(machine.machineId);
                         $("#machineName").val(machine.machineName);
                         $("#machineType").val(machine.machineType);
-                        $("#permission").val(machine.machineUserId);
+                        $("#machineUser").val(machine.machineUserId);
                     } else {
-                        layer.msg('获取用户信息异常!', {icon: 2, time: 1000});
+                        layer.msg('获取机器信息异常!', {icon: 2, time: 1000});
                     }
                 },
                 error: function (errorThrown) {
@@ -112,16 +152,15 @@
             increaseArea: '20%'
         });
 
-        $("#form-admin-user-update").validate({
+        $("#form-admin-machine-update").validate({
             rules: {
-                userName: {
+                machineName: {
                     required: true
                 },
-                password: {
+                machineType: {
                     required: true,
-                    minlength: 6
                 },
-                permission: {
+                machineUser: {
                     required: true
                 }
             },
@@ -130,13 +169,14 @@
             success: "valid",
             submitHandler: function (form) {
 
-                var formData = form2JsonObject("form-admin-user-update");
-                formData = Object.assign(formData, {"permission": $("#permission").val()});
+                var formData = form2JsonObject("form-admin-machine-update");
+                formData = Object.assign(formData, {"machineType": $("#machineType").val()});
+                formData = Object.assign(formData, {"machineUserId": $("#machineUser").val()});
 
                 console.log(formData);
                 $.ajax({
                     type: 'POST',
-                    url: "../../admin/updateUser.json",
+                    url: "../../admin/updateMachine.json",
                     data: JSON.stringify(formData),
                     cache: false,
                     async: false,

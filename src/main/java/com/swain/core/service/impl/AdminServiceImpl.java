@@ -19,7 +19,9 @@ import java.util.*;
 @Service
 public class AdminServiceImpl implements AdminService {
 
-    /**用户管理*/
+    /**
+     * 用户管理
+     */
     @Autowired
     private UserManager userManager;
 
@@ -55,9 +57,9 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public User checkLogin(User user) {
         User loginUser = userManager.selectOne(new EntityWrapper<User>()
-                .eq("username",user.getUsername())
-                .eq("password",user.getPassword()));
-        if(loginUser == null){
+                .eq("username", user.getUsername())
+                .eq("password", user.getPassword()));
+        if (loginUser == null) {
             return new User();
         }
         return loginUser;
@@ -69,7 +71,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-    /**机器管理*/
+    /**
+     * 机器管理
+     */
     @Autowired
     private MachineManager machineManager;
 
@@ -78,19 +82,20 @@ public class AdminServiceImpl implements AdminService {
         List<Machine> machineList = machineManager.selectList(new EntityWrapper<Machine>().orderDesc(Collections.singleton("gmt_modified")));
         List<MachineVO> machineVOList = new ArrayList<>();
 
-        Map<Long,String> machineUserNameMap = new HashMap<Long,String>();
+        Map<Long, User> machineUserMap = new HashMap<>();
 
-        for(Machine machine:machineList){
-            if(machineUserNameMap.containsKey(machine.getMachineId()) == false){
-                String machineUserName = userManager.selectById(machine.getMachineUserId()).getUsername();
-                machineUserNameMap.put(machine.getMachineId(),machineUserName);
+        for (Machine machine : machineList) {
+
+            if (!machineUserMap.containsKey(machine.getMachineId())) {
+                User machineUser = userManager.selectById(machine.getMachineUserId());
+                machineUserMap.put(machine.getMachineId(), machineUser);
             }
 
             MachineVO machineVO = new MachineVO();
             machineVO.setMachineId(machine.getMachineId());
             machineVO.setMachineName(machine.getMachineName());
             machineVO.setMachineType(machine.getMachineType());
-            machineVO.setMachineUserName(machineUserNameMap.get(machine.getMachineId()));
+            machineVO.setMachineUserName(machineUserMap.get(machine.getMachineId()).getUsername());
             machineVO.setGmtCreate(machine.getGmtCreate());
             machineVO.setGmtModified(machine.getGmtModified());
             machineVOList.add(machineVO);
@@ -109,17 +114,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public MachineVO getMachineById(Long id) {
-        Machine machine = machineManager.selectById(id);
-        User user = userManager.selectById(machine.getMachineUserId());
-        MachineVO machineVO = new MachineVO();
-        machineVO.setMachineId(machine.getMachineId());
-        machineVO.setMachineName(machine.getMachineName());
-        machineVO.setMachineType(machine.getMachineType());
-        machineVO.setMachineUserName(user.getUsername());
-        machineVO.setGmtCreate(machine.getGmtCreate());
-        machineVO.setGmtModified(machine.getGmtModified());
-        return machineVO;
+    public Machine getMachineById(Long id) {
+        return machineManager.selectById(id);
     }
 
     @Override
@@ -138,15 +134,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-    /**物料的管理
+    /**
+     * 物料的管理
      */
     @Autowired
     private MaterialManager materialManager;
+
     @Override
     public Integer addMaterial(Material material) {
         //若物料已存在，则增加库存即可
-        Material m = materialManager.selectOne(new EntityWrapper<Material>().eq("material_name",material.getMaterialName()));
-        if(m != null){
+        Material m = materialManager.selectOne(new EntityWrapper<Material>().eq("material_name", material.getMaterialName()));
+        if (m != null) {
             m.setMaterialTotal(m.getMaterialTotal().add(material.getMaterialTotal()));
             return materialManager.updateById(m);
         }
@@ -166,7 +164,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<Material> getAllMaterials() {
         return materialManager.selectList(new EntityWrapper<Material>().orderDesc(Collections.singleton("gmt_modified"))
-            );
+        );
     }
 
     @Override
@@ -180,26 +178,27 @@ public class AdminServiceImpl implements AdminService {
      */
     @Autowired
     private ProductManager productManager;
+
     @Override
     public List<ProductVO> getAllProducts() {
         List<Product> productList = productManager.selectList(new EntityWrapper<Product>().orderDesc(Collections.singleton("gmt_modified")));
         //List<MachineVO> machineVOList = new ArrayList<>();
         List<ProductVO> productVOList = new ArrayList<>();
-        Map<Long,String> productUserNameMap = new HashMap<>();
-        Map<Long,String> productMachineNameMap = new HashMap<>();
-        Map<Long,String> productMaterialNameMap = new HashMap<>();
-        for(Product product:productList){
-            if(productUserNameMap.containsKey(product.getProductUserId()) == false){
+        Map<Long, String> productUserNameMap = new HashMap<>();
+        Map<Long, String> productMachineNameMap = new HashMap<>();
+        Map<Long, String> productMaterialNameMap = new HashMap<>();
+        for (Product product : productList) {
+            if (productUserNameMap.containsKey(product.getProductUserId()) == false) {
                 productUserNameMap.put(product.getProductUserId()
-                        ,userManager.selectById(product.getProductUserId()).getUsername());
+                        , userManager.selectById(product.getProductUserId()).getUsername());
             }
-            if(productMachineNameMap.containsKey(product.getProductMachineId()) == false){
+            if (productMachineNameMap.containsKey(product.getProductMachineId()) == false) {
                 productMachineNameMap.put(product.getProductMachineId()
-                        ,machineManager.selectById(product.getProductMachineId()).getMachineName());
+                        , machineManager.selectById(product.getProductMachineId()).getMachineName());
             }
-            if(productMaterialNameMap.containsKey(product.getProductMaterialId()) == false){
+            if (productMaterialNameMap.containsKey(product.getProductMaterialId()) == false) {
                 productMaterialNameMap.put(product.getProductMaterialId()
-                        ,materialManager.selectById(product.getProductMaterialId()).getMaterialName());
+                        , materialManager.selectById(product.getProductMaterialId()).getMaterialName());
             }
             ProductVO productVO = new ProductVO();
 
@@ -237,14 +236,15 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private RepairManager repairManager;
+
     @Override
     public List<RepairVO> getAllRepairs() {
         List<Repair> repairList = repairManager.selectList(
                 new EntityWrapper<Repair>().orderDesc(Collections.singleton("gmt_modified")));
         List<RepairVO> repairVoList = new ArrayList<>();
-        Map<Long,String> repairMachineMap = new HashMap<>();
-        for(Repair repair:repairList){
-            if(repairMachineMap.containsKey(repair.getRepairMachineId()) == false){
+        Map<Long, String> repairMachineMap = new HashMap<>();
+        for (Repair repair : repairList) {
+            if (repairMachineMap.containsKey(repair.getRepairMachineId()) == false) {
                 repairMachineMap.put(repair.getRepairMachineId(),
                         machineManager.selectById(repair.getRepairMachineId()).getMachineName());
             }
