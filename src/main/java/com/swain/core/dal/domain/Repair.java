@@ -35,8 +35,16 @@ public class Repair extends BaseModel {
     @TableField("repair_machine_id")
     private Long repairMachineId;
     /**
+     * 维修机器状况
+     */
+
+    @TableField("repair_machine_type")
+    private Integer repairMachineType;
+
+    /**
      * 维修价格
      */
+
     @TableField("repair_price")
     private BigDecimal repairPrice;
     /**

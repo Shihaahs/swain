@@ -115,6 +115,35 @@ public class ToController {
     }
 
 
+    /**
+     * 管理员 生产数据管理
+     */
+    @RequestMapping("/to/admin-product")
+    public String toAdminProduct(){
+        return "admin-product";
+    }
+    @RequestMapping("/to/admin-product-update")
+    public ModelAndView toAdminUpdateProduct(@RequestParam Long productId) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin-product-update");
+        mv.addObject("productId", productId);
+        return mv;
+    }
+
+    /**
+     * 管理员 维修管理
+     */
+    @RequestMapping("/to/admin-repair")
+    public String toAdminRepair(){
+        return "admin-repair";
+    }
+    @RequestMapping("/to/admin-repair-update")
+    public ModelAndView toAdminUpdateRepair(@RequestParam Long repairId) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin-repair-update");
+        mv.addObject("repairId", repairId);
+        return mv;
+    }
 
 
     /**

@@ -3,6 +3,8 @@ package com.swain.web.controller;
 
 import com.swain.core.common.enums.ConstantEnum;
 import com.swain.core.common.vo.MachineVO;
+import com.swain.core.common.vo.ProductVO;
+import com.swain.core.common.vo.RepairVO;
 import com.swain.core.dal.domain.*;
 import com.swain.core.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +34,7 @@ public class AdminController {
      */
     @RequestMapping(value = "/login.json", method = RequestMethod.POST)
     public User login(@RequestBody User user) {
-        //这里自己写吧，我直接返回一个值了
+
         return adminService.checkLogin(user);
     }
 
@@ -164,6 +166,91 @@ public class AdminController {
             return null;
         }
         return adminService.getMaterialById(material.getMaterialId());
+    }
+
+
+
+
+
+    /**
+     * =======   管理员-产品管理   =======
+     */
+    @RequestMapping(value = "/admin/getAllProducts.json", method = RequestMethod.POST)
+    public List<ProductVO> getAllProducts() {
+        return adminService.getAllProducts();
+    }
+
+//    @RequestMapping(value = "/admin/addProduct.json", method = RequestMethod.POST)
+//    public Integer addMaterial(@RequestBody Material material) {
+//        return adminService.addMaterial(material);
+//    }
+
+    @RequestMapping(value = "/admin/deleteProduct.json", method = RequestMethod.POST)
+    public Integer deleteProduct(@RequestBody Product product) {
+        if (Objects.isNull(product.getProductId())) {
+            log.error("管理员删除产品异常 -> id为空");
+            return ConstantEnum.ZONE.getCode();
+        }
+        return adminService.deleteProductById(product.getProductId());
+    }
+
+    @RequestMapping(value = "/admin/updateProduct.json", method = RequestMethod.POST)
+    public Integer updateProduct(@RequestBody Product product) {
+        if (Objects.isNull(product.getProductId())) {
+            log.error("管理员修改产品异常 -> id为空");
+            return ConstantEnum.ZONE.getCode();
+        }
+        return adminService.updateProduct(product);
+    }
+
+    @RequestMapping(value = "/admin/getProductById.json", method = RequestMethod.POST)
+    public ProductVO getProductById(@RequestBody Product product) {
+        if (Objects.isNull(product.getProductId())) {
+            log.error("管理员根据id获取物料异常 -> id为空");
+            return null;
+        }
+        return adminService.getProductById(product.getProductId());
+    }
+
+
+    /**
+     * =======   管理员-维修管理   =======
+     */
+    @RequestMapping(value = "/admin/getAllRepairs.json", method = RequestMethod.POST)
+    public List<RepairVO> getAllRepairs() {
+        return adminService.getAllRepairs();
+    }
+
+//    @RequestMapping(value = "/admin/addProduct.json", method = RequestMethod.POST)
+//    public Integer addMaterial(@RequestBody Material material) {
+//        return adminService.addMaterial(material);
+//    }
+
+    @RequestMapping(value = "/admin/deleteRepair.json", method = RequestMethod.POST)
+    public Integer deleteRepair(@RequestBody Repair repair) {
+        if (Objects.isNull(repair.getRepairId())) {
+            log.error("管理员删除产品异常 -> id为空");
+            return ConstantEnum.ZONE.getCode();
+        }
+        return adminService.deleteRepairById(repair.getRepairId());
+    }
+
+    @RequestMapping(value = "/admin/updateRepair.json", method = RequestMethod.POST)
+    public Integer updateRepair(@RequestBody Repair repair) {
+        if (Objects.isNull(repair.getRepairId())) {
+            log.error("管理员修改维修信息异常 -> id为空");
+            return ConstantEnum.ZONE.getCode();
+        }
+        return adminService.updateRepair(repair);
+    }
+
+    @RequestMapping(value = "/admin/getRepairById.json", method = RequestMethod.POST)
+    public RepairVO getRepairById(@RequestBody Repair repair) {
+        if (Objects.isNull(repair.getRepairId())) {
+            log.error("管理员根据id获取维修信息异常 -> id为空");
+            return null;
+        }
+        return adminService.getRepairById(repair.getRepairId());
     }
 
 }
