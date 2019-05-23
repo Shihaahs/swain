@@ -55,6 +55,11 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public Integer register(User user) {
+        return userManager.insert(user);
+    }
+
+    @Override
     public User checkLogin(User user) {
         User loginUser = userManager.selectOne(new EntityWrapper<User>()
                 .eq("username", user.getUsername())
@@ -64,6 +69,7 @@ public class AdminServiceImpl implements AdminService {
         }
         return loginUser;
     }
+
 
     @Override
     public Integer addUser(User user) {
@@ -131,6 +137,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Integer updateMachine(Machine machine) {
         return machineManager.updateById(machine);
+    }
+
+    @Override
+    public List<Machine> getMachineByUser(User user) {
+        return machineManager.selectList(new EntityWrapper<Machine>().eq("machineUserId",user.getUserId()));
     }
 
 
@@ -219,13 +230,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ProductVO getProductById(Long id) {
-        return null;
+    public Product getProductById(Long id) {
+        return productManager.selectById(id);
     }
 
     @Override
     public Integer updateProduct(Product product) {
-        return null;
+        return productManager.updateById(product);
     }
 
     @Override

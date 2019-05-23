@@ -20,60 +20,56 @@
     <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>DD_belatedPNG.fix('*');</script>
     <![endif]-->
-    <title>修改生产数据</title>
+    <title>新增数据</title>
 </head>
 <body>
 <article class="page-container">
-    <form class="form form-horizontal" id="form-admin-product-update">
-        <div class="row cl">
-            <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" id="productId" style="display: none" name="productId"/>
-            </div>
-        </div>
+    <form class="form form-horizontal" id="form-staff-product-add">
+
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>负责人：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="productUser" class="select" style="width: 17%;height:32px ;display: inline-block">
-                    <option disabled selected hidden>请选择负责人</option>
+                <select id="productUser" class="select" style="width: 22%;height:32px ;display: inline-block" >
+                    <option disabled selected hidden >请选择负责人</option>
                 </select>
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="productMachine" class="select" style="width: 17%;height:32px ;display: inline-block">
-                    <option disabled selected hidden>请选择机器</option>
+                <select id="productMachine" class="select" style="width: 22%;height:32px ;display: inline-block" >
+                    <option disabled selected hidden >请选择机器</option>
                 </select>
             </div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>投入物料：</label>
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>物料：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="productMaterial" class="select" style="width: 17%;height:32px ;display: inline-block">
-                    <option disabled selected hidden>请选择物料</option>
+                <select id="productMaterial" class="select" style="width: 22%;height:32px ;display: inline-block" >
+                    <option disabled selected hidden >请选择物料</option>
                 </select>
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>物料重量：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="请输入投入物料的重量" id="productMaterialWeight"
+                <input type="text" class="input-text" value="" placeholder="请输入投入物料重量" id="productMaterialWeight"
                        name="productMaterialWeight">
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>产品名称：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="请输入产品名称" id="productName"
-                       name="productName">
+                <input type="text" class="input-text" value="" placeholder="请输入产品名称" id="productOutName"
+                       name="productOutName">
             </div>
         </div>
         <div class="row cl">
-        <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>产品重量：</label>
-        <div class="formControls col-xs-8 col-sm-9">
-            <input type="text" class="input-text" value="" placeholder="请输入产品重量" id="productWeight"
-                   name="productWeight">
-        </div>
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>产品重量：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="请输入投入产品重量" id="productOutWeight"
+                       name="productOutWeight">
+            </div>
         </div>
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
@@ -97,6 +93,11 @@
 <script type="text/javascript" src="/static/fillFrom.js"></script>
 <script type="text/javascript">
     $(function () {
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
         //下拉选择框获取所有员工
         $.ajax({
             type: 'POST',
@@ -195,113 +196,72 @@
             }
         });
 
-
-        var url = location.search; //获取url中"?“符后的字串
-        //获取要修改的用户信息
-        if (url.indexOf("?") !== -1) { //判断是否有参数
-            strs = url.split("="); //用等号进行分隔 （因为知道只有一个参数 所以直接用等号进分隔 如果有多个参数 要用&号分隔 再用等号进行分隔）
-            var product = {
-                "productId": strs[1]
-            }; //直接弹出第一个参数 （如果有多个参数 还要进行循环的）
-
-            $.ajax({
-                type: 'POST',
-                url: "../../admin/getProductById.json",
-                data: JSON.stringify(product),
-                cache: false,
-                async: false,
-                dataType: "json",
-                contentType: "application/json;charset=utf-8",
-                success: function (data) {
-                    if (data !== null) {
-                        var product = data;
-                        $("#productId").val(product.productId);
-                        $("#productUser").val(product.productUserId);
-                        $("#productMachine").val(product.productMachineId);
-                        $("#productMaterial").val(product.productMaterialId);
-                        $("#productMaterialWeight").val(product.productMaterialWeight);
-                        $("#productName").val(product.productOutName);
-                        $("#productWeight").val(product.productOutWeight);
-
-                    } else {
-                        layer.msg('获取生产信息异常!', {icon: 2, time: 1000});
-                    }
-
-                },
-                error: function (errorThrown) {
-                    layer.msg('error!', {icon: 1, time: 1000});
-                }
-
-            })
-
-        }
-
-        $('.skin-minimal input').iCheck({
-            checkboxClass: 'icheckbox-blue',
-            radioClass: 'iradio-blue',
-            increaseArea: '20%'
-        });
-
-        $("#form-admin-user-update").validate({
+        $("#form-staff-product-add").validate({
             rules: {
                 productUser: {
                     required: true
                 },
+
                 productMachine: {
-                    required: true,
+                    required: true
                 },
                 productMaterial: {
                     required: true
                 },
                 productMaterialWeight: {
-                    required: true,
+                    required: true
                 },
-                productName: {
-                    required: true,
+                productOutName: {
+                    required: true
                 },
-                productWeight: {
-                    required: true,
+                productOutWeight: {
+                    required: true
                 }
-
             },
             onkeyup: false,
             focusCleanup: true,
             success: "valid",
             submitHandler: function (form) {
 
-                var formData = form2JsonObject("form-admin-product-update");
-                formData = Object.assign(formData, {"productUserId": $("#productUser").val()});
-                formData = Object.assign(formData, {"productMachineId": $("#productMachine").val()});
-                formData = Object.assign(formData, {"productMaterialId": $("#productMaterial").val()});
+                var formData = form2JsonObject("form-staff-product-add");
+                formData = Object.assign(formData,{"productUserId": $("#productUser").val() });
+                formData = Object.assign(formData,{"productMachineId": $("#productMachine").val() });
+                formData = Object.assign(formData,{"productMaterialId": $("#productMaterial").val() });
 
                 console.log(formData);
+
                 $.ajax({
                     type: 'POST',
-                    url: "../../admin/updateProduct.json",
+                    url: "../../staff/addProduct.json",
                     data: JSON.stringify(formData),
                     cache: false,
                     async: false,
                     dataType: "json",
                     contentType: "application/json;charset=utf-8",
                     success: function (data) {
+
+                        if (data === 0) {
+                            layer.msg('添加失败，系统错误', {icon: 2, time: 1000});
+                        }
                         if (data === 1) {
-                            layer.msg('修改成功!', {icon: 1, time: 1000});
+                            layer.msg('添加成功!', {icon: 1, time: 1000});
 
                             parent.$("#refresh i").click();
                             var index = parent.layer.getFrameIndex(window.name);
                             setTimeout(function () {
                                 parent.layer.close(index);
                             }, 500);
-                        } else {
-                            layer.msg('修改异常!', {icon: 2, time: 1000});
                         }
+//                        if (data === 2) {
+//                            layer.msg('机器名称重复! 请重新输入!', {icon: 2, time: 1000});
+//                            $("#machineName").val("");
+//                        }
+
                     },
                     error: function (errorThrown) {
                         layer.msg('error!', {icon: 1, time: 1000});
                     }
                 });
-
-
 
             }
         });

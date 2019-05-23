@@ -37,7 +37,11 @@ public class AdminController {
 
         return adminService.checkLogin(user);
     }
+    @RequestMapping(value = "/register.json", method = RequestMethod.POST)
+    public Integer register(@RequestBody User user) {
 
+        return adminService.register(user);
+    }
 
     /**
      * =======   管理员-用户管理   =======
@@ -112,7 +116,7 @@ public class AdminController {
     @RequestMapping(value = "/admin/updateMachine.json", method = RequestMethod.POST)
     public Integer updateMachine(@RequestBody Machine machine) {
         if (Objects.isNull(machine.getMachineId())) {
-            log.error("管理员修改用户异常 -> id为空");
+            log.error("管理员修改机器异常 -> id为空");
             return ConstantEnum.ZONE.getCode();
         }
         return adminService.updateMachine(machine);
@@ -121,7 +125,7 @@ public class AdminController {
     @RequestMapping(value = "/admin/getMachineById.json", method = RequestMethod.POST)
     public Machine getMachineById(@RequestBody Machine machine) {
         if (Objects.isNull(machine.getMachineId())) {
-            log.error("管理员根据id获取用户异常 -> id为空");
+            log.error("管理员根据id获取机器异常 -> id为空");
             return null;
         }
         return adminService.getMachineById(machine.getMachineId());
@@ -204,7 +208,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/getProductById.json", method = RequestMethod.POST)
-    public ProductVO getProductById(@RequestBody Product product) {
+    public Product getProductById(@RequestBody Product product) {
         if (Objects.isNull(product.getProductId())) {
             log.error("管理员根据id获取物料异常 -> id为空");
             return null;

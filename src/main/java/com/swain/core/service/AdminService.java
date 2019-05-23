@@ -4,6 +4,7 @@ import com.swain.core.common.vo.MachineVO;
 import com.swain.core.common.vo.ProductVO;
 import com.swain.core.common.vo.RepairVO;
 import com.swain.core.dal.domain.*;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 
@@ -51,8 +52,10 @@ public interface AdminService {
     List<User> getAllStaff();
 
 
-
-
+    /**
+     * 注册
+     */
+    Integer register(User user);
 
     /**
      * 检查登陆
@@ -87,7 +90,6 @@ public interface AdminService {
      * @return
      */
     Integer deleteMachineById(Long id);
-
     /**
      * 修改员工信息
      * @param machine
@@ -95,6 +97,7 @@ public interface AdminService {
      */
     Integer updateMachine(Machine machine);
 
+    List<Machine> getMachineByUser(User user);
     /**
      * 添加物料
      * @param material
@@ -135,7 +138,7 @@ public interface AdminService {
      */
     List<ProductVO> getAllProducts();
 
-    ProductVO getProductById(Long id);
+    Product getProductById(Long id);
 
     Integer updateProduct(Product product);
 

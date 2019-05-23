@@ -18,9 +18,16 @@ public class ToController {
         return "login";
     }
 
+    //管理员首页
     @RequestMapping("/to/index")
     public String toIndex() {
         return "index";
+    }
+
+    //员工首页
+    @RequestMapping("/to/index2")
+    public String toIndex2() {
+        return "index2";
     }
 
     @RequestMapping("/to/welcome")
@@ -145,45 +152,79 @@ public class ToController {
         return mv;
     }
 
+//
+//    /**
+//     *     管理员 - 车辆管理
+//     */
+//    @RequestMapping("/to/admin-car")
+//    public String toAdminCar() {
+//        return "admin-car";
+//    }
+//
+//    @RequestMapping("/to/admin-car-add")
+//    public String toAdminAddCar() {
+//        return "admin-car-add";
+//    }
+//
+//    /**
+//     *     管理员 - 配送管理
+//     */
+//    @RequestMapping("/to/admin-arrange")
+//    public String toAdminArrange() {
+//        return "admin-arrange";
+//    }
+//    @RequestMapping("/to/admin-arrange-update")
+//    public ModelAndView toAdminUpdateArrange(@RequestParam Long orderId, @RequestParam Long orderRegionId) {
+//        System.out.println(orderId);
+//        ModelAndView mv = new ModelAndView();
+//        mv.setViewName("admin-arrange-update");
+//        mv.addObject("orderId", orderId);
+//        mv.addObject("orderRegionId", orderRegionId);
+//        return mv;
+//    }
+//
+//    /**
+//     *     管理员 - 报表管理
+//     */
+//    @RequestMapping("/to/admin-report")
+//    public String toAdminReport() {
+//        return "admin-report";
+//    }
+
 
     /**
-     *     管理员 - 车辆管理
+     *  员工 物料管理
      */
-    @RequestMapping("/to/admin-car")
-    public String toAdminCar() {
-        return "admin-car";
-    }
+    @RequestMapping("/to/staff-material")
+    public String toStaffMaterial() {return "staff-material";}
 
-    @RequestMapping("/to/admin-car-add")
-    public String toAdminAddCar() {
-        return "admin-car-add";
-    }
+    @RequestMapping("/to/staff-material-add")
+    public String toStaffAddMaterial() {return "staff-material-add";}
 
-    /**
-     *     管理员 - 配送管理
-     */
-    @RequestMapping("/to/admin-arrange")
-    public String toAdminArrange() {
-        return "admin-arrange";
-    }
-    @RequestMapping("/to/admin-arrange-update")
-    public ModelAndView toAdminUpdateArrange(@RequestParam Long orderId, @RequestParam Long orderRegionId) {
-        System.out.println(orderId);
+    @RequestMapping("/to/staff-material-update")
+    public ModelAndView toStaffUpdateMaterial(@RequestParam Long materialId) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin-arrange-update");
-        mv.addObject("orderId", orderId);
-        mv.addObject("orderRegionId", orderRegionId);
+        mv.setViewName("staff-material-update");
+        mv.addObject("materialId", materialId);
         return mv;
     }
-
     /**
-     *     管理员 - 报表管理
+     * 员工 生产数据管理
      */
-    @RequestMapping("/to/admin-report")
-    public String toAdminReport() {
-        return "admin-report";
+    @RequestMapping("/to/staff-product")
+    public String toStaffProduct() {return "staff-product";}
+    @RequestMapping("/to/staff-product-add")
+    public String toStaffAddProduct(){
+        return "staff-product-add";
     }
+    /**
+     * 员工 故障上报管理
+     */
+    @RequestMapping("/to/staff-repair")
+    public String toStaffRepair() {return "staff-repair";}
 
+    @RequestMapping("/to/staff-repair-add")
+    public String toStaffAddRepair() {return "staff-repair-add";}
 
 
 }

@@ -20,7 +20,7 @@
     <script>DD_belatedPNG.fix('*');</script>
 
     <![endif]-->
-    <title>车间生产管理系统 - Sivir</title>
+    <title>车间生产管理系统</title>
 </head>
 <body>
 <div class="header"></div>
@@ -155,7 +155,12 @@
                         console.log(data);
                         if (data.userId !== null) {
                             localStorage.setItem("user", JSON.stringify(data));
-                            window.location.href = "../to/index";
+                            if(data.permission === 0){
+                                window.location.href = "../to/index";
+                            }else{
+                                window.location.href = "../to/index2";
+                            }
+
                         }
 
                         if (data.userId === null) {
@@ -187,18 +192,12 @@
                     required: true,
                     minlength: 6
                 },
-                phoneRegister: {
-                    required: true,
-                    minlength: 11,
-                    maxlength: 11,
-                    isPhone: true
-                }
+
             },
             onkeyup: false,
             focusCleanup: true,
             success: "valid",
             submitHandler: function (form) {
-                var phone = $("#phoneRegister").val();
                 var pwd = $("#passwordRegister").val();
                 var cpwd = $("#passwordRegisterConfirm").val();
 
@@ -209,8 +208,7 @@
                     return;
                 }
                 var user = {
-                    userName: $("#userNameRegister").val(),
-                    phone : phone,
+                    username: $("#userNameRegister").val(),
                     password : pwd,
                     permission : $("#permission").val(),
                 };
@@ -226,18 +224,17 @@
                     contentType: "application/json;charset=utf-8",
                     success: function (data) {
 
-                        if (data.code === "200") {
+                        if (data === 1) {
                             alert('注册成功!');
                             window.location.href = "../to/login";
                         }
-                        if (data.code === "1003") {
-                            alert('手机号已存在!');
-                            $("#phoneRegister").val("");
-                            $("#userNameRegister").val("");
-                            $("#passwordRegister").val("");
-                            $("#passwordRegisterConfirm").val("");
-                            $("#permission").val("");
-                        }
+//                        if (data.code === "1003") {
+//                            alert('手机号已存在!');
+//                            $("#userNameRegister").val("");
+//                            $("#passwordRegister").val("");
+//                            $("#passwordRegisterConfirm").val("");
+//                            $("#permission").val("");
+//                        }
 
                     },
                     error: function (errorThrown) {

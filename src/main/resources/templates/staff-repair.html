@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>维修管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span
+        class="c-gray en">&gt;</span> 维修管理 <a id="refresh" class="btn btn-success radius r"
+                                              style="line-height:1.6em;margin-top:3px"
+                                              href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+			<button onclick="removeIframe()" class="btn btn-primary radius">关闭选项卡</button>
+            <a class="btn btn-primary radius" data-title="新增故障"
+            onclick="addRepair(this)" href="javascript:;">
+            <i class="Hui-iconfont">&#xe600;</i> 新增故障
+            </a>
+		</span>
+        <span class="r">共有数据：<strong id="pageCount"></strong> 条</span></div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive"
+               id="table">
+            <thead>
+            <tr class="text-c">
+                <th width="30">序号</th>
+                <th width="120">机器名称</th>
+                <th width="120">故障描述</th>
+                <th width="120">维修价格</th>
+                <th width="60" >维修状况</th>
+                <th width="120">更新时间</th>
+
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/static/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="/static/fillFrom.js"></script>
+<script type="text/javascript" th:inline="none">
+    var table;
+    var index = 0;
+    //页面加载后自动请求一次
+    $(document).ready(initTable());
+
+    //加载table数据
+    function initTable() {
+
+        table = $("#table").DataTable({
+            "aaSorting": [[0, "asc"]],//属性'aaSorting':初始化表格的时候，选择以怎样的规则排序 asc - 顺， desc - 逆
+            "aoColumnDefs": [
+                {"orderable": false, "aTargets": [2,5]}// 制定列不参与排序 //targets ： 表示具体需要操作的目标列，下标从 0 开始
+            ],
+            "keys": true,
+            "bProcessing": false, //是否显示加载
+            "sAjaxSource": '../staff/getAllRepairs.json', //请求资源路径,即是"sAjaxSource"
+            "serverSide": false, //开启服务器处理模式
+            "fnServerData": function (sSource, aoData, fnCallback) {    //fnServerData : 路径 参数 回调函数
+                $.ajax({
+                    'type': 'post', //提交方式
+                    "url": sSource, //路径
+                    "dataType": "json", //数据类型:json
+                    // "data": JSON.stringify(),
+                    "contentType": "application/json;charset=utf-8",
+                    "success": function (data) {
+                        console.log(data);
+                        fnCallback(data); // 成功:回调函数
+                        $("#pageCount").html(data.length);  //数据总数
+                    }
+                });
+            },
+            "columns": [
+                {render: function (data, type, full, meta) {
+                    return ++index;
+                }
+                },
+                {data: "repairMachineName"},
+                {data: "repairComment"},
+                {data: "repairPrice"},
+                {data: "repairMachineType", //状态
+                    render: function (data, type, full, meta) {
+                        switch (data) {
+                            case 0:
+                                return '未维修';
+                            case 1:
+                                return '已维修';
+                        }
+                    }
+                },
+                {data: "gmtModified"}
+            ]
+        });
+
+    }
+
+
+        /* 跳转新增页面 */
+        function addRepair() {
+            layer.open({
+                type: 2,
+                area: ['800px', '500px'],
+                fix: false, //不固定
+                maxmin: true,
+                shade: 0.4,
+                title: "新增故障",
+                content: '../to/staff-repair-add'
+            });
+        }
+
+    /* 跳转修改页面 */
+//    function updateRepair(id) {
+//        layer.open({
+//            type: 2,
+//            area: ['800px', '500px'],
+//            fix: false, //不固定
+//            maxmin: true,
+//            shade: 0.4,
+//            title: "修改维修记录",
+//            content: '../to/admin-repair-update?repairId=' + id
+//        });
+//    }
+//
+//
+//    /*删除该物料*/
+//    function deleteRepair(obj, id) {
+//        var repair ={
+//            "repairId": id
+//        }
+//
+//        layer.confirm('确认要删除该维修记录吗？', function () {
+//            $.ajax({
+//                type: 'POST',
+//                url: '../admin/deleteRepair.json',
+//                data: JSON.stringify(repair),
+//                dataType: 'json',
+//                contentType: "application/json;charset=utf-8",
+//                success: function (data) {
+//                    if (data === 1) {
+//                        $(obj).parents("tr").remove();
+//                        $("#refresh i").click();
+//                        layer.msg('数据已删除!', {icon: 1, time: 1000});
+//                    } else {
+//                        layer.msg('删除异常!', {icon: 2, time: 1000});
+//                    }
+//
+//                },
+//                error: function (data) {
+//                    console.log(data.msg);
+//                }
+//            });
+//        });
+//    }
+
+</script>
+</body>
+</html>
