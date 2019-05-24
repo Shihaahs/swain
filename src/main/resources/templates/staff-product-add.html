@@ -26,27 +26,28 @@
 <article class="page-container">
     <form class="form form-horizontal" id="form-staff-product-add">
 
-        <div class="row cl">
+<!--        <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>负责人：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="productUser" class="select" style="width: 22%;height:32px ;display: inline-block" >
-                    <option disabled selected hidden >请选择负责人</option>
+                <select id="productUser" class="select" style="width: 22%;height:32px ;display: inline-block"
+                        onchange="bindMachine()">
+                    <option disabled selected hidden>请选择负责人</option>
                 </select>
             </div>
-        </div>
+        </div>-->
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="productMachine" class="select" style="width: 22%;height:32px ;display: inline-block" >
-                    <option disabled selected hidden >请选择机器</option>
+                <select id="productMachine" class="select" style="width: 22%;height:32px ;display: inline-block">
+                    <option disabled selected hidden>请选择机器</option>
                 </select>
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>物料：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="productMaterial" class="select" style="width: 22%;height:32px ;display: inline-block" >
-                    <option disabled selected hidden >请选择物料</option>
+                <select id="productMaterial" class="select" style="width: 22%;height:32px ;display: inline-block">
+                    <option disabled selected hidden>请选择物料</option>
                 </select>
             </div>
         </div>
@@ -99,46 +100,51 @@
             increaseArea: '20%'
         });
         //下拉选择框获取所有员工
+        // $.ajax({
+        //     type: 'POST',
+        //     url: "../../admin/getAllStaff.json",
+        //     cache: false,
+        //     async: false,
+        //     dataType: "json",
+        //     contentType: "application/json;charset=utf-8",
+        //     success: function (data) {
+        //         console.log(data);
+        //         var productUser = $("#productUser");
+        //
+        //         //防止数据重复添加
+        //         if (productUser.find("option:last").index() > 1) {
+        //             productUser.empty();
+        //             productUser.append("<option disabled selected hidden >请选择负责人</option>")
+        //         }
+        //
+        //         //给select追加数据
+        //         var len = data.length;
+        //         for (var i = 0; i < len; i++) {
+        //             var option = document.createElement('option');
+        //             option.innerText = data[i]['username'];
+        //             option.value = data[i]['userId'];
+        //             productUser.append(option);
+        //         }
+        //
+        //     },
+        //     error: function (errorThrown) {
+        //         layer.msg('error!', {icon: 1, time: 1000});
+        //     }
+        // });
+        var userObj = JSON.parse(localStorage.getItem("user"));
+        let user = {
+            userId: userObj.userId
+        };
         $.ajax({
             type: 'POST',
-            url: "../../admin/getAllStaff.json",
+            url: "../../admin/getMachineByUser.json",
+            data: JSON.stringify(user),
             cache: false,
             async: false,
             dataType: "json",
             contentType: "application/json;charset=utf-8",
             success: function (data) {
-                console.log(data);
-                var productUser = $("#productUser");
 
-                //防止数据重复添加
-                if (productUser.find("option:last").index() > 1) {
-                    productUser.empty();
-                    productUser.append("<option disabled selected hidden >请选择负责人</option>")
-                }
-
-                //给select追加数据
-                var len = data.length;
-                for (var i = 0; i < len; i++) {
-                    var option = document.createElement('option');
-                    option.innerText = data[i]['username'];
-                    option.value = data[i]['userId'];
-                    productUser.append(option);
-                }
-
-            },
-            error: function (errorThrown) {
-                layer.msg('error!', {icon: 1, time: 1000});
-            }
-        });
-
-        $.ajax({
-            type: 'POST',
-            url: "../../admin/getAllMachines.json",
-            cache: false,
-            async: false,
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
                 console.log(data);
                 var productMachine = $("#productMachine");
 
@@ -224,9 +230,9 @@
             submitHandler: function (form) {
 
                 var formData = form2JsonObject("form-staff-product-add");
-                formData = Object.assign(formData,{"productUserId": $("#productUser").val() });
-                formData = Object.assign(formData,{"productMachineId": $("#productMachine").val() });
-                formData = Object.assign(formData,{"productMaterialId": $("#productMaterial").val() });
+                formData = Object.assign(formData, {"productUserId": $("#productUser").val()});
+                formData = Object.assign(formData, {"productMachineId": $("#productMachine").val()});
+                formData = Object.assign(formData, {"productMaterialId": $("#productMaterial").val()});
 
                 console.log(formData);
 
@@ -266,6 +272,8 @@
             }
         });
     });
+
+
 
 </script>
 </body>

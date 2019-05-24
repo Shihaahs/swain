@@ -5,6 +5,7 @@ import com.swain.core.common.vo.ProductVO;
 import com.swain.core.common.vo.RepairVO;
 import com.swain.core.dal.domain.*;
 import io.swagger.models.auth.In;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.List;
 
@@ -154,4 +155,13 @@ public interface AdminService {
     Integer updateRepair(Repair repair);
 
     Integer deleteRepairById(Long id);
+
+    /**
+     * <p> 生成业务报表 </p>
+     * @return XSSFWorkbook excel
+     * @date 2019/4/9 16:35
+     *
+     */
+    XSSFWorkbook getBusinessReport();
+
 }

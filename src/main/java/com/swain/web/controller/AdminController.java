@@ -2,15 +2,20 @@ package com.swain.web.controller;
 
 
 import com.swain.core.common.enums.ConstantEnum;
+import com.swain.core.common.util.DateUtil;
 import com.swain.core.common.vo.MachineVO;
 import com.swain.core.common.vo.ProductVO;
 import com.swain.core.common.vo.RepairVO;
 import com.swain.core.dal.domain.*;
 import com.swain.core.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -129,6 +134,15 @@ public class AdminController {
             return null;
         }
         return adminService.getMachineById(machine.getMachineId());
+    }
+
+    @RequestMapping(value = "/admin/getMachineByUser.json", method = RequestMethod.POST)
+    public List<Machine> getMachineByUser(@RequestBody User user) {
+        if (Objects.isNull(user.getUserId())) {
+            log.error("管理员根据用户获取机器异常 -> id为空");
+            return null;
+        }
+        return adminService.getMachineByUser(user);
     }
 
 
@@ -256,5 +270,18 @@ public class AdminController {
         }
         return adminService.getRepairById(repair.getRepairId());
     }
+    @RequestMapping(value = "/admin/getBusinessReport.json", method = RequestMethod.GET)
+    public Boolean getBusinessReport(HttpServletResponse response) throws Exception{
 
+        XSSFWorkbook workbook = adminService.getBusinessReport();
+
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "attachment;filename=" + new String("订单报表".getBytes("UTF-8"),"iso-8859-1")
+                + DateUtil.parseToString(new Date(),DateUtil.NORMAL_PATTERN) + ".xls");
+        OutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
+        return null;
+    }
 }

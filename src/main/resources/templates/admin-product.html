@@ -32,10 +32,10 @@
     <div class="cl pd-5 bg-1 bk-gray mt-20">
 		<span class="l">
 			<button onclick="removeIframe()" class="btn btn-primary radius">关闭选项卡</button>
-			<!--<a class="btn btn-primary radius" data-title="新增物料"-->
-               <!--onclick="addMaterial(this)" href="javascript:;">-->
-				<!--<i class="Hui-iconfont">&#xe600;</i> 新增物料-->
-			<!--</a>-->
+			<a class="btn btn-primary radius" data-title="导出数据"
+               onclick="uploadReport(this)" href="javascript:;">
+				<i class="Hui-iconfont">&#xe600;</i> 导出数据
+			</a>
 		</span>
         <span class="r">共有数据：<strong id="pageCount"></strong> 条</span></div>
     <div class="mt-20">
@@ -179,6 +179,10 @@
                 }
             });
         });
+    }
+
+    function uploadReport() {
+        window.location.href = "../admin/getBusinessReport.json";
     }
 
 </script>

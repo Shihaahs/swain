@@ -33,7 +33,7 @@
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>负责人：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="productUser" class="select" style="width: 17%;height:32px ;display: inline-block">
+                <select id="productUser" class="select" style="width: 17%;height:32px ;display: inline-block" onchange="bindMachine()">
                     <option disabled selected hidden>请选择负责人</option>
                 </select>
             </div>
@@ -42,7 +42,7 @@
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器：</label>
             <div class="formControls col-xs-8 col-sm-9">
                 <select id="productMachine" class="select" style="width: 17%;height:32px ;display: inline-block">
-                    <option disabled selected hidden>请选择机器</option>
+                    <option disabled selected hidden>请先选择负责人</option>
                 </select>
             </div>
         </div>
@@ -96,6 +96,8 @@
 <script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
 <script type="text/javascript" src="/static/fillFrom.js"></script>
 <script type="text/javascript">
+
+    var staffId;
     $(function () {
         //下拉选择框获取所有员工
         $.ajax({
@@ -130,37 +132,37 @@
             }
         });
 
-        $.ajax({
-            type: 'POST',
-            url: "../../admin/getAllMachines.json",
-            cache: false,
-            async: false,
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                console.log(data);
-                var productMachine = $("#productMachine");
-
-                //防止数据重复添加
-                if (productMachine.find("option:last").index() > 1) {
-                    productMachine.empty();
-                    productMachine.append("<option disabled selected hidden >请选择机器</option>")
-                }
-
-                //给select追加数据
-                var len = data.length;
-                for (var i = 0; i < len; i++) {
-                    var option = document.createElement('option');
-                    option.innerText = data[i]['machineName'];
-                    option.value = data[i]['machineId'];
-                    productMachine.append(option);
-                }
-
-            },
-            error: function (errorThrown) {
-                layer.msg('error!', {icon: 1, time: 1000});
-            }
-        });
+        // $.ajax({
+        //     type: 'POST',
+        //     url: "../../admin/getAllMachines.json",
+        //     cache: false,
+        //     async: false,
+        //     dataType: "json",
+        //     contentType: "application/json;charset=utf-8",
+        //     success: function (data) {
+        //         console.log(data);
+        //         var productMachine = $("#productMachine");
+        //
+        //         //防止数据重复添加
+        //         if (productMachine.find("option:last").index() > 1) {
+        //             productMachine.empty();
+        //             productMachine.append("<option disabled selected hidden >请选择机器</option>")
+        //         }
+        //
+        //         //给select追加数据
+        //         var len = data.length;
+        //         for (var i = 0; i < len; i++) {
+        //             var option = document.createElement('option');
+        //             option.innerText = data[i]['machineName'];
+        //             option.value = data[i]['machineId'];
+        //             productMachine.append(option);
+        //         }
+        //
+        //     },
+        //     error: function (errorThrown) {
+        //         layer.msg('error!', {icon: 1, time: 1000});
+        //     }
+        // });
 
         //下拉框实现获取所有物料
         $.ajax({
@@ -305,6 +307,47 @@
         });
     });
 
+
+    function bindMachine() {
+        let user = {
+            userId: $("#productUser").val(),
+        };
+        $.ajax({
+            type: 'POST',
+            url: "../../admin/getMachineByUser.json",
+            data: JSON.stringify(user),
+            cache: false,
+            async: false,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                var productMachine = $("#productMachine");
+
+                //防止数据重复添加
+                if (productMachine.find("option:last").index() > 1) {
+                    productMachine.empty();
+                    productMachine.append("<option disabled selected hidden >请选择机器</option>")
+                }
+
+                //给select追加数据
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    var option = document.createElement('option');
+                    option.innerText = data[i]['machineName'];
+                    option.value = data[i]['machineId'];
+                    productMachine.append(option);
+                }
+
+
+            },
+            error: function (errorThrown) {
+                layer.msg('error!', {icon: 1, time: 1000});
+            }
+        });
+
+
+    }
 </script>
 </body>
 </html>
