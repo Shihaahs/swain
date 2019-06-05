@@ -1,9 +1,11 @@
 package com.swain.core.service;
 
+import com.swain.core.common.vo.ProductVO;
 import com.swain.core.common.vo.RepairVO;
 import com.swain.core.dal.domain.Material;
 import com.swain.core.dal.domain.Product;
 import com.swain.core.dal.domain.Repair;
+import com.swain.core.dal.domain.User;
 
 import java.util.List;
 
@@ -43,6 +45,12 @@ public interface StaffService {
      */
     Integer addProduct(Product product);
 
+    /***
+     * 获取员工负责的生产数据
+     */
+    List<ProductVO> getAllProductsByUser(User user);
+
+    Integer updateProduct(Product product);
     /**
      * 新增故障信息
      * @param repair

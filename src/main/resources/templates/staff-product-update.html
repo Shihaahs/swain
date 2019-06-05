@@ -20,21 +20,24 @@
     <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>DD_belatedPNG.fix('*');</script>
     <![endif]-->
-    <title>新增数据</title>
+    <title>修改生产数据</title>
 </head>
 <body>
 <article class="page-container">
-    <form class="form form-horizontal" id="form-staff-product-add">
-
-<!--        <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>负责人：</label>
+    <form class="form form-horizontal" id="form-staff-product-update">
+        <div class="row cl">
             <div class="formControls col-xs-8 col-sm-9">
-                <select id="productUser" class="select" style="width: 22%;height:32px ;display: inline-block"
-                        onchange="bindMachine()">
-                    <option disabled selected hidden>请选择负责人</option>
-                </select>
+                <input type="hidden" id="productId" style="display: none" name="productId"/>
             </div>
-        </div>-->
+        </div>
+        <!--<div class="row cl">-->
+            <!--<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>负责人：</label>-->
+            <!--<div class="formControls col-xs-8 col-sm-9">-->
+                <!--<select id="productUser" class="select" style="width: 17%;height:32px ;display: inline-block" onchange="bindMachine()">-->
+                    <!--<option disabled selected hidden>请选择负责人</option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>机器：</label>
             <div class="formControls col-xs-8 col-sm-9">
@@ -93,37 +96,104 @@
 <script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
 <script type="text/javascript" src="/static/fillFrom.js"></script>
 <script type="text/javascript">
-    $(function () {
-        $('.skin-minimal input').iCheck({
-            checkboxClass: 'icheckbox-blue',
-            radioClass: 'iradio-blue',
-            increaseArea: '20%'
-        });
-        //下拉选择框获取所有员工
+
+    var staffId;
+
+    var userObj = JSON.parse(localStorage.getItem("user"));
+    let user = {
+        userId: userObj.userId
+    };
+    $.ajax({
+        type: 'POST',
+        url: "../../admin/getMachineByUser.json",
+        data: JSON.stringify(user),
+        cache: false,
+        async: false,
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+
+            console.log(data);
+            var productMachine = $("#productMachine");
+
+            //防止数据重复添加
+            if (productMachine.find("option:last").index() > 1) {
+                productMachine.empty();
+                productMachine.append("<option disabled selected hidden >请选择机器</option>")
+            }
+
+            //给select追加数据
+            var len = data.length;
+            for (var i = 0; i < len; i++) {
+                var option = document.createElement('option');
+                option.innerText = data[i]['machineName'];
+                option.value = data[i]['machineId'];
+                productMachine.append(option);
+            }
+
+        },
+        error: function (errorThrown) {
+            layer.msg('error!', {icon: 1, time: 1000});
+        }
+    });
+//    $(function () {
+//        //下拉选择框获取所有员工
+//        $.ajax({
+//            type: 'POST',
+//            url: "../../admin/getAllStaff.json",
+//            cache: false,
+//            async: false,
+//            dataType: "json",
+//            contentType: "application/json;charset=utf-8",
+//            success: function (data) {
+//                console.log(data);
+//                var productUser = $("#productUser");
+//
+//                //防止数据重复添加
+//                if (productUser.find("option:last").index() > 1) {
+//                    productUser.empty();
+//                    productUser.append("<option disabled selected hidden >请选择负责人</option>")
+//                }
+//
+//                //给select追加数据
+//                var len = data.length;
+//                for (var i = 0; i < len; i++) {
+//                    var option = document.createElement('option');
+//                    option.innerText = data[i]['username'];
+//                    option.value = data[i]['userId'];
+//                    productUser.append(option);
+//                }
+//
+//            },
+//            error: function (errorThrown) {
+//                layer.msg('error!', {icon: 1, time: 1000});
+//            }
+//        });
+
         // $.ajax({
         //     type: 'POST',
-        //     url: "../../admin/getAllStaff.json",
+        //     url: "../../admin/getAllMachines.json",
         //     cache: false,
         //     async: false,
         //     dataType: "json",
         //     contentType: "application/json;charset=utf-8",
         //     success: function (data) {
         //         console.log(data);
-        //         var productUser = $("#productUser");
+        //         var productMachine = $("#productMachine");
         //
         //         //防止数据重复添加
-        //         if (productUser.find("option:last").index() > 1) {
-        //             productUser.empty();
-        //             productUser.append("<option disabled selected hidden >请选择负责人</option>")
+        //         if (productMachine.find("option:last").index() > 1) {
+        //             productMachine.empty();
+        //             productMachine.append("<option disabled selected hidden >请选择机器</option>")
         //         }
         //
         //         //给select追加数据
         //         var len = data.length;
         //         for (var i = 0; i < len; i++) {
         //             var option = document.createElement('option');
-        //             option.innerText = data[i]['username'];
-        //             option.value = data[i]['userId'];
-        //             productUser.append(option);
+        //             option.innerText = data[i]['machineName'];
+        //             option.value = data[i]['machineId'];
+        //             productMachine.append(option);
         //         }
         //
         //     },
@@ -131,43 +201,6 @@
         //         layer.msg('error!', {icon: 1, time: 1000});
         //     }
         // });
-        var userObj = JSON.parse(localStorage.getItem("user"));
-        let user = {
-            userId: userObj.userId
-        };
-        $.ajax({
-            type: 'POST',
-            url: "../../admin/getMachineByUser.json",
-            data: JSON.stringify(user),
-            cache: false,
-            async: false,
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-
-                console.log(data);
-                var productMachine = $("#productMachine");
-
-                //防止数据重复添加
-                if (productMachine.find("option:last").index() > 1) {
-                    productMachine.empty();
-                    productMachine.append("<option disabled selected hidden >请选择机器</option>")
-                }
-
-                //给select追加数据
-                var len = data.length;
-                for (var i = 0; i < len; i++) {
-                    var option = document.createElement('option');
-                    option.innerText = data[i]['machineName'];
-                    option.value = data[i]['machineId'];
-                    productMachine.append(option);
-                }
-
-            },
-            error: function (errorThrown) {
-                layer.msg('error!', {icon: 1, time: 1000});
-            }
-        });
 
         //下拉框实现获取所有物料
         $.ajax({
@@ -201,27 +234,72 @@
                 layer.msg('error!', {icon: 1, time: 1000});
             }
         });
+        var url = location.search; //获取url中"?“符后的字串
+        //获取要修改的用户信息
+        if (url.indexOf("?") !== -1) { //判断是否有参数
+            console.log(url);
+            //判断是否有参数
+            strs = url.split("="); //用等号进行分隔 （因为知道只有一个参数 所以直接用等号进分隔 如果有多个参数 要用&号分隔 再用等号进行分隔）
+            var product = {
+                "productId": strs[1]
+            };
 
-        $("#form-staff-product-add").validate({
+            $.ajax({
+                type: 'POST',
+                url: "../../admin/getProductById.json",
+                data: JSON.stringify(product),
+                cache: false,
+                async: false,
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    if (data !== null) {
+                        var product = data;
+                        $("#productId").val(product.productId);
+                        $("#productUser").val(product.productUserId);
+                        $("#productMachine").val(product.productMachineId);
+                        $("#productMaterial").val(product.productMaterialId);
+                        $("#productMaterialWeight").val(product.productMaterialWeight);
+                        $("#productOutName").val(product.productOutName);
+                        $("#productOutWeight").val(product.productOutWeight);
+
+                    } else {
+                        layer.msg('获取生产信息异常!', {icon: 2, time: 1000});
+                    }
+
+                },
+                error: function (errorThrown) {
+                    layer.msg('error!', {icon: 1, time: 1000});
+                }
+
+            })
+        }
+
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+
+        $("#form-staff-product-update").validate({
             rules: {
 //                productUser: {
 //                    required: true
 //                },
-
                 productMachine: {
-                    required: true
+                    required: true,
                 },
                 productMaterial: {
                     required: true
                 },
                 productMaterialWeight: {
-                    required: true
+                    required: true,
                 },
                 productOutName: {
-                    required: true
+                    required: true,
                 },
                 productOutWeight: {
-                    required: true
+                    required: true,
                 }
             },
             onkeyup: false,
@@ -229,52 +307,85 @@
             success: "valid",
             submitHandler: function (form) {
 
-                var formData = form2JsonObject("form-staff-product-add");
-                formData = Object.assign(formData, {"productUserId": user.userId});
+                var formData = form2JsonObject("form-staff-product-update");
+                formData = Object.assign(formData, {"productUserId":user.userId});
                 formData = Object.assign(formData, {"productMachineId": $("#productMachine").val()});
                 formData = Object.assign(formData, {"productMaterialId": $("#productMaterial").val()});
 
                 console.log(formData);
-
                 $.ajax({
                     type: 'POST',
-                    url: "../../staff/addProduct.json",
+                    url: "../../admin/updateProduct.json",
                     data: JSON.stringify(formData),
                     cache: false,
                     async: false,
                     dataType: "json",
                     contentType: "application/json;charset=utf-8",
                     success: function (data) {
-
-                        if (data === 0) {
-                            layer.msg('添加失败，添加的物料库存不足！', {icon: 2, time: 1000});
-                        }
                         if (data === 1) {
-                            layer.msg('添加成功!', {icon: 1, time: 1000});
+                            layer.msg('修改成功!', {icon: 1, time: 1000});
 
                             parent.$("#refresh i").click();
                             var index = parent.layer.getFrameIndex(window.name);
                             setTimeout(function () {
                                 parent.layer.close(index);
                             }, 500);
+                        } else {
+                            layer.msg('修改异常!', {icon: 2, time: 1000});
                         }
-//                        if (data === 2) {
-//                            layer.msg('机器名称重复! 请重新输入!', {icon: 2, time: 1000});
-//                            $("#machineName").val("");
-//                        }
-
                     },
                     error: function (errorThrown) {
                         layer.msg('error!', {icon: 1, time: 1000});
                     }
                 });
 
+
+
             }
         });
-    });
 
 
 
+//    function bindMachine() {
+//        let user = {
+//            userId: user.userId,
+//        };
+//        $.ajax({
+//            type: 'POST',
+//            url: "../../admin/getMachineByUser.json",
+//            data: JSON.stringify(user),
+//            cache: false,
+//            async: false,
+//            dataType: "json",
+//            contentType: "application/json;charset=utf-8",
+//            success: function (data) {
+//                console.log(data);
+//                var productMachine = $("#productMachine");
+//
+//                //防止数据重复添加
+//                if (productMachine.find("option:last").index() > 1) {
+//                    productMachine.empty();
+//                    productMachine.append("<option disabled selected hidden >请选择机器</option>")
+//                }
+//
+//                //给select追加数据
+//                var len = data.length;
+//                for (var i = 0; i < len; i++) {
+//                    var option = document.createElement('option');
+//                    option.innerText = data[i]['machineName'];
+//                    option.value = data[i]['machineId'];
+//                    productMachine.append(option);
+//                }
+//
+//
+//            },
+//            error: function (errorThrown) {
+//                layer.msg('error!', {icon: 1, time: 1000});
+//            }
+//        });
+//
+//
+//    }
 </script>
 </body>
 </html>

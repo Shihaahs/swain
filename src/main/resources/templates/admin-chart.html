@@ -1,0 +1,257 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>数据统计</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span
+        class="c-gray en">&gt;</span> 数据统计 <a id="refresh" class="btn btn-success radius r"
+                                              style="line-height:1.6em;margin-top:3px"
+                                              href="javascript:location.replace(location.href);" title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+			<button onclick="removeIframe()" class="btn btn-primary radius">关闭选项卡</button>
+            <div style="display: inline-block;margin-left: 30px">
+
+                <select id="machineSelect" class="select" onchange="getProductSelectData()"
+                        style="width: 140px;height:28px ;display: inline-block">
+                    <option disabled selected hidden>请选择机器</option>
+                </select>
+
+                <select id="productSelect" class="select" onchange="bindProduct()"
+                        style="width: 140px;height:28px ;display: inline-block">
+                    <option disabled selected hidden>请选择产品</option>
+                </select>
+
+            </div>
+		</span>
+
+    </div>
+    <div id="container" style="min-width:700px;height:400px"></div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/static/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="/static/fillFrom.js"></script>
+<!--3D柱状图js-->
+<script type="text/javascript" src="/static/lib/hcharts/Highcharts/5.0.6/js/highcharts.js"></script>
+<script type="text/javascript" src="/static/lib/hcharts/Highcharts/5.0.6/js/modules/exporting.js"></script>
+<script type="text/javascript" src="/static/lib/hcharts/Highcharts/5.0.6/js/highcharts-3d.js"></script>
+<script type="text/javascript" th:inline="none">
+
+    var machineSelect = $("#machineSelect");
+    var productSelect = $("#productSelect");
+    var chartData = {
+        name: "请选择产品",
+        data: [null, null, null, null, null, null, null, null, null, null, null, null]
+
+    };
+    //页面加载后自动请求一次
+    $(document).ready(
+        //initTable(),
+        getMachineSelectData(),
+        initChart(chartData)
+    );
+
+    /*初始化柱状图   data为数值数组，如：data = [29.9, 71.5, 106.4, 129.2, 99.2] */
+    function initChart(chartData) {
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container',
+                type: 'column',
+                margin: 75,
+                options3d: {
+                    enabled: true,
+                    alpha: 15,
+                    beta: 15,
+                    depth: 50,
+                    viewDistance: 25
+                }
+            },
+            title: {
+                text: '车间生产数据统计'
+            },
+            subtitle: {
+                text: '2019年车间生产情况如下图'
+            },
+            plotOptions: {
+                column: {
+                    depth: 25
+                }
+            },
+            //横坐标 -> 值    【shortMonthsZN - 中文月份】
+            xAxis: {
+                categories: Highcharts.getOptions().lang.shortMonths
+            },
+            //纵坐标 -> 值
+            yAxis: {
+                title: {
+                    text: "产值净重 kg"
+                }
+            },
+            //图数据
+            series: [{
+                name: chartData.name,
+                data: chartData.data
+            }]
+        });
+
+        showValues()
+    }
+
+
+    //下拉选择框获取所有机器
+    function getMachineSelectData() {
+        $.ajax({
+            type: 'POST',
+            url: "../../admin/getAllMachines.json",
+            cache: false,
+            async: false,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+
+                //防止数据重复添加
+                if (machineSelect.find("option:last").index() > 1) {
+                    machineSelect.empty();
+                    machineSelect.append("<option disabled selected hidden >请选择机器</option>")
+                }
+
+                //给select追加数据
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    var option = document.createElement('option');
+                    option.innerText = data[i]['machineName'];
+                    option.value = data[i]['machineId'];
+                    machineSelect.append(option);
+                }
+
+            },
+            error: function (errorThrown) {
+                layer.msg('error!', {icon: 1, time: 1000});
+            }
+        });
+
+
+    }
+
+    //下拉选择框获取所有产品
+    function getProductSelectData() {
+
+        var machineId = machineSelect.val();
+        if (machineId === null && machineId === undefined) {
+            alert("请先选择机器!");
+            return
+        }
+        $.ajax({
+            type: 'GET',
+            url: "../../admin/getProductListByMachineId.json?machineId=" + machineId,
+            cache: false,
+            async: false,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+
+                //防止数据重复添加
+                if (productSelect.find("option:last").index() > 1) {
+                    productSelect.empty();
+                    productSelect.append("<option disabled selected hidden >请选择产品</option>")
+                }
+
+                //给select追加数据
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    var option = document.createElement('option');
+                    option.innerText = data[i]['productOutName'];
+                    option.value = data[i]['productMachineId'];
+                    productSelect.append(option);
+                }
+
+            },
+            error: function (errorThrown) {
+                layer.msg('error!', {icon: 1, time: 1000});
+            }
+        });
+
+
+    }
+
+
+    function bindProduct() {
+
+        var productMachineId = productSelect.val();
+        var productOutName = productSelect.find("option:selected").text();
+        if (productMachineId === null && productMachineId === undefined) {
+            alert("请选择产品!");
+            return
+        }
+        $.ajax({
+            type: 'GET',
+            url: "../../admin/getChartDataByProductId.json?productMachineId=" + productMachineId + "&productOutName=" + productOutName,
+            cache: false,
+            async: false,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                chartData.name = data.chartName;
+                chartData.data = data.chartData;
+                console.log(chartData);
+                initChart(chartData);
+            },
+            error: function (errorThrown) {
+                layer.msg('error!', {icon: 1, time: 1000});
+            }
+        });
+
+    }
+
+    // Activate the sliders
+    $('#R0').on('change', function () {
+        chart.options.chart.options3d.alpha = this.value;
+        showValues();
+        chart.redraw(false);
+    });
+    $('#R1').on('change', function () {
+        chart.options.chart.options3d.beta = this.value;
+        showValues();
+        chart.redraw(false);
+    });
+
+    function showValues() {
+        $('#R0-value').html(chart.options.chart.options3d.alpha);
+        $('#R1-value').html(chart.options.chart.options3d.beta);
+    }
+
+</script>
+</body>
+</html>

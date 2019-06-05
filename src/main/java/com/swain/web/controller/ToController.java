@@ -217,6 +217,10 @@ public class ToController {
     public String toStaffAddProduct(){
         return "staff-product-add";
     }
+    @RequestMapping("/to/staff-product-update")
+    public String toStaffUpdateProduct(){
+        return "staff-product-update";
+    }
     /**
      * 员工 故障上报管理
      */
@@ -225,6 +229,9 @@ public class ToController {
 
     @RequestMapping("/to/staff-repair-add")
     public String toStaffAddRepair() {return "staff-repair-add";}
+
+    @RequestMapping("/to/admin-chart")
+    public String toAdminChart() {return "admin-chart";}
 
 
 }

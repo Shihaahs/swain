@@ -75,6 +75,7 @@
     $(document).ready(initTable());
 
     //加载table数据
+
     function initTable() {
 
         table = $("#table").DataTable({
@@ -84,14 +85,18 @@
             ],
             "keys": true,
             "bProcessing": false, //是否显示加载
-            "sAjaxSource": '../admin/getAllProducts.json', //请求资源路径,即是"sAjaxSource"
+            "sAjaxSource": '../staff/getAllProductsByUser.json', //请求资源路径,即是"sAjaxSource"
             "serverSide": false, //开启服务器处理模式
             "fnServerData": function (sSource, aoData, fnCallback) {    //fnServerData : 路径 参数 回调函数
+                var userObj = JSON.parse(localStorage.getItem("user"));
+                let user = {
+                    userId: userObj.userId
+                };
                 $.ajax({
                     'type': 'post', //提交方式
                     "url": sSource, //路径
                     "dataType": "json", //数据类型:json
-                    // "data": JSON.stringify(),
+                    "data": JSON.stringify(user),
                     "contentType": "application/json;charset=utf-8",
                     "success": function (data) {
                         console.log(data);
@@ -146,7 +151,7 @@
             maxmin: true,
             shade: 0.4,
             title: "修改产品数据",
-            content: '../to/admin-product-update?productId=' + id
+            content: '../to/staff-product-update?productId=' + id
         });
     }
 

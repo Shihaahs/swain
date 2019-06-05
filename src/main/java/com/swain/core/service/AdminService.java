@@ -1,5 +1,6 @@
 package com.swain.core.service;
 
+import com.swain.core.common.vo.ChartVO;
 import com.swain.core.common.vo.MachineVO;
 import com.swain.core.common.vo.ProductVO;
 import com.swain.core.common.vo.RepairVO;
@@ -141,6 +142,8 @@ public interface AdminService {
 
     Product getProductById(Long id);
 
+    List<Product> getProductListByMachineId(Long machineId);
+
     Integer updateProduct(Product product);
 
     Integer deleteProductById(Long id);
@@ -163,5 +166,8 @@ public interface AdminService {
      *
      */
     XSSFWorkbook getBusinessReport();
+
+    ChartVO getChartDataByProductId(Long productMachineId,String productOutName);
+
 
 }

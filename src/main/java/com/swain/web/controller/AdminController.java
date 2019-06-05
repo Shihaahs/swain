@@ -3,6 +3,7 @@ package com.swain.web.controller;
 
 import com.swain.core.common.enums.ConstantEnum;
 import com.swain.core.common.util.DateUtil;
+import com.swain.core.common.vo.ChartVO;
 import com.swain.core.common.vo.MachineVO;
 import com.swain.core.common.vo.ProductVO;
 import com.swain.core.common.vo.RepairVO;
@@ -229,7 +230,14 @@ public class AdminController {
         }
         return adminService.getProductById(product.getProductId());
     }
-
+    @RequestMapping(value = "/admin/getProductListByMachineId.json", method = RequestMethod.GET)
+    public List<Product> getProductListByMachineId(@RequestParam Long machineId) {
+        if (Objects.isNull(machineId)) {
+            log.error("管理员根据机器id获取产品异常 -> machineId为空");
+            return null;
+        }
+        return adminService.getProductListByMachineId(machineId);
+    }
 
     /**
      * =======   管理员-维修管理   =======
@@ -276,7 +284,7 @@ public class AdminController {
         XSSFWorkbook workbook = adminService.getBusinessReport();
 
         response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-disposition", "attachment;filename=" + new String("订单报表".getBytes("UTF-8"),"iso-8859-1")
+        response.setHeader("Content-disposition", "attachment;filename=" + new String("生产报表".getBytes("UTF-8"),"iso-8859-1")
                 + DateUtil.parseToString(new Date(),DateUtil.NORMAL_PATTERN) + ".xls");
         OutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
@@ -284,4 +292,17 @@ public class AdminController {
         outputStream.close();
         return null;
     }
+
+
+    @RequestMapping(value = "/admin/getChartDataByProductId.json", method = RequestMethod.GET)
+    public ChartVO getChartDataByProductId(@RequestParam Long productMachineId, @RequestParam String productOutName) {
+        if (Objects.isNull(productMachineId) && Objects.isNull(productOutName)) {
+            log.error("管理员根据产品id获取产品异常 -> productMachineId");
+            return null;
+        }
+        return adminService.getChartDataByProductId(productMachineId,productOutName);
+    }
+
+
+
 }

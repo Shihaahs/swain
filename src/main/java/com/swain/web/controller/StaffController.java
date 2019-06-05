@@ -2,10 +2,12 @@ package com.swain.web.controller;
 
 
 import com.swain.core.common.enums.ConstantEnum;
+import com.swain.core.common.vo.ProductVO;
 import com.swain.core.common.vo.RepairVO;
 import com.swain.core.dal.domain.Material;
 import com.swain.core.dal.domain.Product;
 import com.swain.core.dal.domain.Repair;
+import com.swain.core.dal.domain.User;
 import com.swain.core.service.StaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,21 @@ public class StaffController {
     @RequestMapping(value = "/staff/addProduct.json", method = RequestMethod.POST)
     public Integer addProduct(@RequestBody Product product) {
         return staffService.addProduct(product);
+    }
+
+    /** 员工 获取所负责的生产数据*/
+    @RequestMapping(value = "/staff/getAllProductsByUser.json", method = RequestMethod.POST)
+    public List<ProductVO> getAllProductsByUser(@RequestBody User user) {
+        return staffService.getAllProductsByUser(user);
+    }
+
+    @RequestMapping(value = "/staff/updateProduct.json", method = RequestMethod.POST)
+    public Integer updateProduct(@RequestBody Product product) {
+        if (Objects.isNull(product.getProductId())) {
+            log.error("员工修改产品异常 -> id为空");
+            return ConstantEnum.ZONE.getCode();
+        }
+        return staffService.updateProduct(product);
     }
 
     /** 员工 故障上报*/

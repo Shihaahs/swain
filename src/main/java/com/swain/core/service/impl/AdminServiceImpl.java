@@ -2,8 +2,10 @@ package com.swain.core.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.google.common.collect.Lists;
 import com.swain.core.common.enums.UserPermissionEnum;
 import com.swain.core.common.util.DateUtil;
+import com.swain.core.common.vo.ChartVO;
 import com.swain.core.common.vo.MachineVO;
 import com.swain.core.common.vo.ProductVO;
 import com.swain.core.common.vo.RepairVO;
@@ -17,7 +19,14 @@ import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Slf4j
 @Service
@@ -242,6 +251,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public List<Product> getProductListByMachineId(Long machineId) {
+        return productManager.selectList(new EntityWrapper<Product>().eq("product_machine_id", machineId))
+                .stream().filter(distinctByKey(Product::getProductOutName)).collect(Collectors.toList());
+    }
+
+    //distinct 条件去重
+    public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return object -> seen.putIfAbsent(keyExtractor.apply(object), Boolean.TRUE) == null;
+    }
+    @Override
     public Integer updateProduct(Product product) {
         return productManager.updateById(product);
     }
@@ -352,6 +372,7 @@ public class AdminServiceImpl implements AdminService {
 
         return createExcelInfo(productVOList);
     }
+
 
     private XSSFWorkbook createExcelInfo(List<ProductVO> productVOList) {
 
@@ -465,6 +486,46 @@ public class AdminServiceImpl implements AdminService {
             row++;
         }
         return workbook;
+    }
+
+
+
+    @Override
+    public ChartVO getChartDataByProductId(Long productMachineId,String productOutName) {
+
+        List<Product> productList = productManager.selectList(
+                new EntityWrapper<Product>()
+                        .eq("product_machine_id", productMachineId)
+                        .eq("product_out_name", productOutName));
+
+        ChartVO chartVO = new ChartVO();
+        chartVO.setChartName(productOutName);
+
+        Double[] chartData = new Double[12];
+        for (int i = 0; i < 12; i++) {
+            BigDecimal sum = new BigDecimal(0);
+            for (Product product : productList) {
+                if (getMonthByDate(product.getGmtModified()) == i) {
+                    sum = sum.add(product.getProductOutWeight());
+                }
+            }
+            if (sum.equals(new BigDecimal(0))) {
+                chartData[i] = null;
+            } else {
+                chartData[i] = sum.doubleValue();
+            }
+            System.out.println("当前月份: " + i + 1 + ",产值: " + chartData[i]);
+        }
+        chartVO.setChartData(chartData);
+        System.out.println(chartVO.toString());
+        return chartVO;
+    }
+
+
+    public int getMonthByDate(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.MONTH);  //会自动减 1
     }
 
 }
